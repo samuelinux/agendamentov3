@@ -63,7 +63,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::5apf5OyEPCg5gteh',
+            '_route' => 'generated::tTAHgkkNyPg2R1Yt',
           ),
           1 => NULL,
           2 => 
@@ -83,7 +83,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FUcDLS9LtSuuRBZS',
+            '_route' => 'generated::qJ5gW465dsguE5Tk',
           ),
           1 => NULL,
           2 => 
@@ -180,13 +180,32 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::ll79h5fjVjMuJgR4',
+            '_route' => 'generated::hSN7iPqtdL9w9p3u',
           ),
           1 => NULL,
           2 => 
           array (
             'GET' => 0,
             'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/api/check-telefone' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::5x4fUEXGwdE4E3Gp',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
           ),
           3 => NULL,
           4 => false,
@@ -237,7 +256,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::rtufcMxIJb0yXmc6',
+            '_route' => 'generated::eS9jBaZKCy0UqmIz',
           ),
           1 => NULL,
           2 => 
@@ -772,7 +791,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::5apf5OyEPCg5gteh' => 
+    'generated::tTAHgkkNyPg2R1Yt' => 
     array (
       'methods' => 
       array (
@@ -784,7 +803,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::5apf5OyEPCg5gteh',
+        'as' => 'generated::tTAHgkkNyPg2R1Yt',
       ),
       'fallback' => false,
       'defaults' => 
@@ -800,7 +819,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::FUcDLS9LtSuuRBZS' => 
+    'generated::qJ5gW465dsguE5Tk' => 
     array (
       'methods' => 
       array (
@@ -812,7 +831,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::FUcDLS9LtSuuRBZS',
+        'as' => 'generated::qJ5gW465dsguE5Tk',
       ),
       'fallback' => false,
       'defaults' => 
@@ -992,7 +1011,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::ll79h5fjVjMuJgR4' => 
+    'generated::hSN7iPqtdL9w9p3u' => 
     array (
       'methods' => 
       array (
@@ -1009,13 +1028,49 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009d70000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000006ef0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::ll79h5fjVjMuJgR4',
+        'as' => 'generated::hSN7iPqtdL9w9p3u',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::5x4fUEXGwdE4E3Gp' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'api/check-telefone',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'api',
+        ),
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@checkTelefone',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@checkTelefone',
+        'namespace' => NULL,
+        'prefix' => 'api',
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::5x4fUEXGwdE4E3Gp',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1105,7 +1160,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::rtufcMxIJb0yXmc6' => 
+    'generated::eS9jBaZKCy0UqmIz' => 
     array (
       'methods' => 
       array (
@@ -1125,7 +1180,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::rtufcMxIJb0yXmc6',
+        'as' => 'generated::eS9jBaZKCy0UqmIz',
       ),
       'fallback' => false,
       'defaults' => 

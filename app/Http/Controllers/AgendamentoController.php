@@ -10,6 +10,7 @@ use App\Models\Agendamento;
 use App\Services\DisponibilidadeService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AgendamentoController extends Controller
 {
@@ -32,13 +33,13 @@ class AgendamentoController extends Controller
 
         // Verificar se o serviço está ativo
         if (!$servico->ativo) {
-            return redirect()->route('empresa', $empresa->slug)
-                ->with('error', 'Este serviço não está disponível no momento.');
+            return redirect()->route("empresa", $empresa->slug)
+                ->with("error", "Este serviço não está disponível no momento.");
         }
 
         $diasDisponiveis = $this->disponibilidadeService->obterProximosDiasDisponiveis($empresa, $servico);
 
-        return view('agendamento.horarios', compact('empresa', 'servico', 'diasDisponiveis'));
+        return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis"));
     }
 
     /**
@@ -46,11 +47,20 @@ class AgendamentoController extends Controller
      */
     public function confirmarAgendamento(Request $request, Empresa $empresa, Servico $servico)
     {
-        $request->validate([
-            'data_hora_inicio' => 'required|date',
-            'nome_cliente' => 'required|string|max:255',
-            'telefone_cliente' => 'required|string|max:20',
-        ]);
+        $rules = [
+            "data_hora_inicio" => "required|date",
+            "telefone_cliente" => "required|string|max:20",
+        ];
+
+        // Se o nome_cliente não for fornecido, significa que o usuário já existe
+        if (!$request->has("nome_cliente") || empty($request->nome_cliente)) {
+            // Se o usuário já existe, não precisamos validar o nome
+        } else {
+            // Se for um novo usuário, o nome é obrigatório
+            $rules["nome_cliente"] = "required|string|max:255";
+        }
+
+        $request->validate($rules);
 
         // Verificar se o serviço pertence à empresa e está ativo
         if ($servico->empresa_id !== $empresa->id || !$servico->ativo) {
@@ -68,12 +78,12 @@ class AgendamentoController extends Controller
         );
 
         $horarioDisponivel = $horariosDisponiveis->first(function ($horario) use ($request) {
-            return $horario['data_hora_inicio'] === $request->data_hora_inicio;
+            return $horario["data_hora_inicio"] === $request->data_hora_inicio;
         });
 
         if (!$horarioDisponivel) {
             return back()->withErrors([
-                'data_hora_inicio' => 'Este horário não está mais disponível. Por favor, escolha outro horário.'
+                "data_hora_inicio" => "Este horário não está mais disponível. Por favor, escolha outro horário."
             ]);
         }
 
@@ -81,39 +91,84 @@ class AgendamentoController extends Controller
             DB::beginTransaction();
 
             // Buscar ou criar cliente
-            $cliente = Usuario::where('telefone', $request->telefone_cliente)->first();
+            $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone_cliente); // Limpa a máscara
+            $cliente = Usuario::where("telefone", $telefoneLimpo)->first();
             
             if (!$cliente) {
+                // Criar novo usuário se não existir
                 $cliente = Usuario::create([
-                    'nome' => $request->nome_cliente,
-                    'telefone' => $request->telefone_cliente,
-                    'tipo' => 'cliente'
+                    "nome" => $request->nome_cliente,
+                    "telefone" => $telefoneLimpo,
+                    "tipo" => "cliente"
                 ]);
             } else {
-                // Atualizar nome se necessário
-                $cliente->update(['nome' => $request->nome_cliente]);
+                // Se o nome foi fornecido e é diferente, atualizar (caso o usuário tenha digitado um nome diferente)
+                if ($request->has("nome_cliente") && !empty($request->nome_cliente) && $cliente->nome !== $request->nome_cliente) {
+                    $cliente->update(["nome" => $request->nome_cliente]);
+                }
             }
 
             // Criar agendamento
             $agendamento = Agendamento::create([
-                'empresa_id' => $empresa->id,
-                'servico_id' => $servico->id,
-                'usuario_id' => $cliente->id,
-                'data_hora_inicio' => $dataHoraInicio,
-                'data_hora_fim' => $dataHoraFim,
-                'status' => 'confirmado'
+                "empresa_id" => $empresa->id,
+                "servico_id" => $servico->id,
+                "usuario_id" => $cliente->id,
+                "data_hora_inicio" => $dataHoraInicio,
+                "data_hora_fim" => $dataHoraFim,
+                "status" => "confirmado"
             ]);
 
             DB::commit();
 
-            return view('agendamento.confirmacao', compact('agendamento', 'empresa', 'servico', 'cliente'));
+            // Autenticar o cliente após o agendamento
+            Auth::login($cliente);
+
+            return view("agendamento.confirmacao", compact("agendamento", "empresa", "servico", "cliente"));
 
         } catch (\Exception $e) {
             DB::rollback();
             
             return back()->withErrors([
-                'error' => 'Erro ao processar agendamento. Tente novamente.'
+                "error" => "Erro ao processar agendamento. Tente novamente."
             ]);
+        }
+    }
+
+    /**
+     * Verifica se o telefone já existe no banco de dados.
+     */
+    public function checkTelefone(Request $request)
+    {
+        try {
+            $request->validate([
+                "telefone" => "required|string|max:20",
+            ]);
+
+            $telefone = preg_replace("/\\D/", "", $request->telefone); // Limpa a máscara
+            
+            // Log para debug
+            \Log::info("Verificando telefone: " . $telefone);
+
+            // Buscar usuário comparando apenas os números do telefone
+            $usuario = Usuario::where("telefone", $telefone)->first();
+            
+            // Log para debug
+            \Log::info("Usuário encontrado: " . ($usuario ? $usuario->nome : "Nenhum"));
+
+            return response()->json([
+                "success" => true,
+                "exists" => (bool) $usuario,
+                "nome" => $usuario ? $usuario->nome : null,
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error("Erro ao verificar telefone: " . $e->getMessage());
+            
+            return response()->json([
+                "success" => false,
+                "error" => "Erro interno do servidor",
+                "message" => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -123,31 +178,31 @@ class AgendamentoController extends Controller
     public function cancelarAgendamento(Request $request)
     {
         $request->validate([
-            'agendamento_id' => 'required|exists:agendamentos,id',
-            'telefone' => 'required|string'
+            "agendamento_id" => "required|exists:agendamentos,id",
+            "telefone" => "required|string"
         ]);
 
-        $agendamento = Agendamento::with(['empresa', 'servico', 'usuario'])
+        $agendamento = Agendamento::with(["empresa", "servico", "usuario"])
             ->find($request->agendamento_id);
 
         // Verificar se o telefone confere
         if ($agendamento->usuario->telefone !== $request->telefone) {
             return back()->withErrors([
-                'telefone' => 'Telefone não confere com o agendamento.'
+                "telefone" => "Telefone não confere com o agendamento."
             ]);
         }
 
         // Verificar se o agendamento pode ser cancelado (não pode estar no passado)
         if (Carbon::parse($agendamento->data_hora_inicio)->isPast()) {
             return back()->withErrors([
-                'error' => 'Não é possível cancelar agendamentos que já passaram.'
+                "error" => "Não é possível cancelar agendamentos que já passaram."
             ]);
         }
 
-        $agendamento->update(['status' => 'cancelado']);
+        $agendamento->update(["status" => "cancelado"]);
 
-        return redirect()->route('empresa', $agendamento->empresa->slug)
-            ->with('success', 'Agendamento cancelado com sucesso!');
+        return redirect()->route("empresa", $agendamento->empresa->slug)
+            ->with("success", "Agendamento cancelado com sucesso!");
     }
 
     /**
@@ -155,6 +210,9 @@ class AgendamentoController extends Controller
      */
     public function mostrarCancelamento()
     {
-        return view('agendamento.cancelamento');
+        return view("agendamento.cancelamento");
     }
 }
+
+
+

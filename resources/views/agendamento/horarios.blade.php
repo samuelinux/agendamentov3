@@ -51,22 +51,26 @@
             <h3 style="margin-bottom: 1rem; color: #2d3748;">Seus dados:</h3>
             
             <div class="form-group">
-                <label for="nome_cliente">Nome completo:</label>
-                <input type="text" id="nome_cliente" name="nome_cliente" class="form-control" 
-                       placeholder="Digite seu nome completo" required>
+                <label for="telefone_cliente">Telefone (WhatsApp):</label>
+                <input type="tel" id="telefone_cliente" name="telefone_cliente" class="form-control" maxlength="15"
+                       placeholder="(11) 99999-9999" required>
             </div>
             
-            <div class="form-group">
-                <label for="telefone_cliente">Telefone (WhatsApp):</label>
-                <input type="tel" id="telefone_cliente" name="telefone_cliente" class="form-control" 
-                       placeholder="(11) 99999-9999" required>
+            <div id="nomeClienteGroup" class="form-group" style="display: none;">
+                <label for="nome_cliente">Nome completo:</label>
+                <input type="text" id="nome_cliente" name="nome_cliente" class="form-control" 
+                       placeholder="Digite seu nome completo">
             </div>
             
             <div id="horarioSelecionado" style="background: #e6fffa; border: 1px solid #81e6d9; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
                 <p style="margin: 0; color: #234e52;"><strong>Horário selecionado:</strong> <span id="horarioTexto"></span></p>
             </div>
             
-            <button type="submit" class="btn btn-success">
+            <button type="button" class="btn btn-primary" id="btnVerificarTelefone" onclick="verificarTelefone()">
+                Verificar Telefone
+            </button>
+            
+            <button type="submit" class="btn btn-success" id="btnConfirmarAgendamento" style="display: none;">
                 Confirmar Agendamento
             </button>
             
@@ -97,6 +101,12 @@ function selecionarHorario(elemento) {
     
     // Mostrar formulário de dados
     document.getElementById('dadosCliente').style.display = 'block';
+    document.getElementById('btnVerificarTelefone').style.display = 'block';
+    document.getElementById('btnConfirmarAgendamento').style.display = 'none';
+    document.getElementById('nomeClienteGroup').style.display = 'none';
+    document.getElementById('nome_cliente').removeAttribute('required');
+    document.getElementById('nome_cliente').removeAttribute('readonly');
+    document.getElementById('nome_cliente').value = ''; // Limpar nome ao selecionar novo horário
     
     // Atualizar texto do horário selecionado
     const dataHora = new Date(horarioSelecionado);
@@ -117,6 +127,83 @@ function selecionarHorario(elemento) {
     });
 }
 
+async function verificarTelefone() {
+    const telefoneInput = document.getElementById('telefone_cliente');
+    const telefone = telefoneInput.value.replace(/\D/g, '');
+    
+    if (!telefone || telefone.length < 10) {
+        alert('Por favor, digite um telefone válido com pelo menos 10 dígitos.');
+        return;
+    }
+
+    // Mostrar loading
+    const btnVerificar = document.getElementById('btnVerificarTelefone');
+    const textoOriginal = btnVerificar.textContent;
+    btnVerificar.textContent = 'Verificando...';
+    btnVerificar.disabled = true;
+
+    try {
+        console.log('Enviando telefone para verificação:', telefone);
+        
+        const response = await fetch('/api/check-telefone', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ telefone: telefone })
+        });
+
+        console.log('Status da resposta:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Dados recebidos:', data);
+
+        if (data.success === false) {
+            throw new Error(data.message || 'Erro na verificação do telefone');
+        }
+
+        if (data.exists) {
+            // Usuário existente - fazer login automático
+            console.log('Usuário existente encontrado:', data.nome);
+            document.getElementById('nome_cliente').value = data.nome;
+            document.getElementById('nomeClienteGroup').style.display = 'block'; 
+            document.getElementById('nome_cliente').setAttribute('readonly', true);
+            document.getElementById('btnVerificarTelefone').style.display = 'none';
+            document.getElementById('btnConfirmarAgendamento').style.display = 'block';
+            
+            // Submeter automaticamente após 1 segundo para dar tempo do usuário ver
+            setTimeout(() => {
+                console.log('Submetendo formulário automaticamente para usuário existente');
+                document.getElementById('agendamentoForm').submit();
+            }, 1000);
+        } else {
+            // Novo usuário - pedir nome
+            console.log('Novo usuário - solicitando nome');
+            document.getElementById('nomeClienteGroup').style.display = 'block';
+            document.getElementById('nome_cliente').value = '';
+            document.getElementById('nome_cliente').removeAttribute('readonly');
+            document.getElementById('nome_cliente').setAttribute('required', true);
+            document.getElementById('btnVerificarTelefone').style.display = 'none';
+            document.getElementById('btnConfirmarAgendamento').style.display = 'block';
+            
+            // Focar no campo nome
+            document.getElementById('nome_cliente').focus();
+        }
+    } catch (error) {
+        console.error('Erro ao verificar telefone:', error);
+        alert('Ocorreu um erro ao verificar o telefone: ' + error.message + '. Tente novamente.');
+        
+        // Restaurar botão
+        btnVerificar.textContent = textoOriginal;
+        btnVerificar.disabled = false;
+    }
+}
+
 function cancelarSelecao() {
     // Remover todas as seleções
     document.querySelectorAll('.time-slot').forEach(slot => {
@@ -131,6 +218,11 @@ function cancelarSelecao() {
     document.getElementById('dataHoraInicio').value = '';
     document.getElementById('nome_cliente').value = '';
     document.getElementById('telefone_cliente').value = '';
+    document.getElementById('nomeClienteGroup').style.display = 'none';
+    document.getElementById('nome_cliente').removeAttribute('required');
+    document.getElementById('nome_cliente').removeAttribute('readonly');
+    document.getElementById('btnVerificarTelefone').style.display = 'block';
+    document.getElementById('btnConfirmarAgendamento').style.display = 'none';
     
     // Scroll para o topo
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -149,4 +241,5 @@ document.getElementById('telefone_cliente')?.addEventListener('input', function(
 });
 </script>
 @endsection
+
 
