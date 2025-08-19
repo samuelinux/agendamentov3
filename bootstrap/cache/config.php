@@ -6,11 +6,11 @@
     'debug' => true,
     'url' => 'http://localhost',
     'asset_url' => NULL,
-    'timezone' => 'UTC',
+    'timezone' => 'America/Sao_Paulo',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:JW1ir0L0BRYhfxqlna1v4qXSwDRPJ7+EbhpvFK1czrU=',
+    'key' => 'base64:zbbznXvVWpKC0UTfjChK0iGw5rtpcwU+jU3Qaw2HTRo=',
     'cipher' => 'AES-256-CBC',
     'maintenance' => 
     array (

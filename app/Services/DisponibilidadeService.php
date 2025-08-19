@@ -24,8 +24,9 @@ class DisponibilidadeService
         if ($jornadasDoDia->isEmpty()) {
             return collect();
         }
-
-        // 3. Gerar todos os slots possíveis dentro das jornadas
+        
+        // 3. Gerar todos os slots possíveis dentro das jornadas,
+        // ajustando para não incluir horários passados no dia atual
         $slotsDisponiveis = $this->gerarSlotsDisponiveis($empresa, $jornadasDoDia, $data);
 
         // 4. Verificar exceções de agenda (feriados, férias, saidinhas)
@@ -34,7 +35,7 @@ class DisponibilidadeService
         // 5. Remover horários já ocupados por agendamentos
         $slotsDisponiveis = $this->removerHorariosOcupados($empresa, $slotsDisponiveis, $data);
 
-        // 6. Verificar disponibilidade para a duração do serviço
+        // 6. Verificar disponibilidade para a duração do serviço (encaixe)
         $horariosDisponiveis = $this->verificarDisponibilidadeParaServico($slotsDisponiveis, $servico, $empresa);
 
         // 7. Aplicar regra de antecedência mínima
@@ -50,7 +51,7 @@ class DisponibilidadeService
     {
         $hoje = Carbon::now()->startOfDay();
         $limite = $hoje->copy()->addDays(7);
-        
+
         return $data->between($hoje, $limite);
     }
 
@@ -60,7 +61,7 @@ class DisponibilidadeService
     private function obterJornadasDoDia(Empresa $empresa, Carbon $data): Collection
     {
         $diaSemana = $data->dayOfWeek; // 0 = domingo, 1 = segunda, etc.
-        
+
         return $empresa->jornadasTrabalho()
             ->where('dia_semana', $diaSemana)
             ->orderBy('hora_inicio')
@@ -70,33 +71,51 @@ class DisponibilidadeService
     /**
      * Gera todos os slots possíveis dentro das jornadas de trabalho
      */
-    private function gerarSlotsDisponiveis(Empresa $empresa, Collection $jornadas, Carbon $data): Collection
+    /**
+ * Gera todos os slots possíveis dentro das jornadas de trabalho
+ */
+private function gerarSlotsDisponiveis(Empresa $empresa, Collection $jornadas, Carbon $data): Collection
     {
         $slots = collect();
         $tamanhoSlot = $empresa->tamanho_slot_minutos;
 
         foreach ($jornadas as $jornada) {
-            // Garantir que temos o formato correto de hora
-            $horaInicio = $jornada->hora_inicio;
-            $horaFim = $jornada->hora_fim;
-            
-            // Se já está no formato HH:MM, usar diretamente, senão extrair
-            if (strlen($horaInicio) > 5) {
-                $horaInicio = substr($horaInicio, 0, 5);
-            }
-            if (strlen($horaFim) > 5) {
-                $horaFim = substr($horaFim, 0, 5);
-            }
-            
+            // Extrair início e fim em formato HH:MM
+            $horaInicio = strlen($jornada->hora_inicio) > 5 ? substr($jornada->hora_inicio, 0, 5) : $jornada->hora_inicio;
+            $horaFim = strlen($jornada->hora_fim) > 5 ? substr($jornada->hora_fim, 0, 5) : $jornada->hora_fim;
+
             try {
                 $inicio = Carbon::createFromFormat('Y-m-d H:i', $data->format('Y-m-d') . ' ' . $horaInicio);
                 $fim = Carbon::createFromFormat('Y-m-d H:i', $data->format('Y-m-d') . ' ' . $horaFim);
             } catch (\Exception $e) {
-                // Se houver erro no formato, pular esta jornada
+                // Pula jornada com formato inválido
                 continue;
             }
 
             $slotAtual = $inicio->copy();
+
+            // Se a data é hoje, não exibir horários passados
+            if ($data->isToday()) {
+                $agora = Carbon::now();
+                // Ajusta apenas se agora está dentro da jornada
+                if ($agora->between($inicio, $fim)) {
+                    // Próximo slot múltiplo do tamanho do slot
+                    $minRest = $agora->minute % $tamanhoSlot;
+                    $proximoSlotValido = $agora->copy()->addMinutes($minRest > 0 ? ($tamanhoSlot - $minRest) : 0);
+                    $proximoSlotValido->second = 0;
+
+                    if ($slotAtual->lt($proximoSlotValido)) {
+                        $slotAtual = $proximoSlotValido;
+                    }
+                }
+
+                // Se a jornada já acabou, não gera nada
+                if ($fim->lte($agora)) {
+                    continue;
+                }
+            }
+
+            // Gera os slots dentro desta jornada
             while ($slotAtual->lt($fim)) {
                 $slots->push($slotAtual->copy());
                 $slotAtual->addMinutes($tamanhoSlot);
@@ -106,6 +125,7 @@ class DisponibilidadeService
         return $slots;
     }
 
+
     /**
      * Remove slots que coincidem com exceções de agenda
      */
@@ -113,32 +133,32 @@ class DisponibilidadeService
     {
         $excecoes = $empresa->excecoesAgenda()
             ->where(function ($query) use ($data) {
-                $query->where('tipo', 'feriado')
-                    ->whereDate('data_inicio', $data->format('Y-m-d'))
+                $query->where("tipo", "feriado")
+                    ->whereDate("data_inicio", $data->format("Y-m-d"))
                     ->orWhere(function ($q) use ($data) {
-                        $q->where('tipo', 'ferias')
-                            ->whereDate('data_inicio', '<=', $data->format('Y-m-d'))
-                            ->whereDate('data_fim', '>=', $data->format('Y-m-d'));
+                        $q->where("tipo", "ferias")
+                            ->whereDate("data_inicio", "<=", $data->format("Y-m-d"))
+                            ->whereDate("data_fim", ">=", $data->format("Y-m-d"));
                     })
                     ->orWhere(function ($q) use ($data) {
-                        $q->where('tipo', 'saidinha')
-                            ->whereDate('data_inicio', $data->format('Y-m-d'));
+                        $q->where("tipo", "saidinha")
+                            ->whereDate("data_inicio", $data->format("Y-m-d"));
                     });
             })
             ->get();
 
         foreach ($excecoes as $excecao) {
-            if ($excecao->tipo === 'feriado') {
+            if ($excecao->tipo === "feriado") {
                 // Feriado bloqueia o dia todo
                 return collect();
-            } elseif ($excecao->tipo === 'ferias') {
+            } elseif ($excecao->tipo === "ferias") {
                 // Férias bloqueiam o dia todo
                 return collect();
-            } elseif ($excecao->tipo === 'saidinha') {
+            } elseif ($excecao->tipo === "saidinha") {
                 // Saidinha bloqueia apenas o período específico
-                $inicioSaidinha = Carbon::parse($excecao->data_inicio . ' ' . $excecao->hora_inicio);
-                $fimSaidinha = Carbon::parse($excecao->data_inicio . ' ' . $excecao->hora_fim);
-                
+                $inicioSaidinha = Carbon::parse($excecao->data_inicio . " " . $excecao->hora_inicio);
+                $fimSaidinha = Carbon::parse($excecao->data_inicio . " " . $excecao->hora_fim);
+
                 $slots = $slots->filter(function ($slot) use ($inicioSaidinha, $fimSaidinha) {
                     return !$slot->between($inicioSaidinha, $fimSaidinha);
                 });
@@ -155,7 +175,7 @@ class DisponibilidadeService
     {
         $agendamentos = $empresa->agendamentos()
             ->confirmados()
-            ->whereDate('data_hora_inicio', $data->format('Y-m-d'))
+            ->whereDate("data_hora_inicio", $data->format("Y-m-d"))
             ->get();
 
         foreach ($agendamentos as $agendamento) {
@@ -177,38 +197,55 @@ class DisponibilidadeService
     {
         $duracaoServico = $servico->duracao_minutos;
         $tamanhoSlot = $empresa->tamanho_slot_minutos;
-        $slotsNecessarios = ceil($duracaoServico / $tamanhoSlot);
-        
+
         $horariosDisponiveis = collect();
-        $slotsOrdenados = $slots->sort();
+        $slotsOrdenados = $slots->sort()->values();
+
+        // Agrupa slots consecutivos (intervalo de jornada) pela diferença de tempo
+        $grupos = collect();
+        $grupoAtual = collect();
 
         foreach ($slotsOrdenados as $index => $slot) {
-            $slotsConsecutivos = collect([$slot]);
-            
-            // Verificar se há slots consecutivos suficientes
-            for ($i = 1; $i < $slotsNecessarios; $i++) {
-                $proximoSlot = $slot->copy()->addMinutes($tamanhoSlot * $i);
-                
-                if ($slotsOrdenados->contains($proximoSlot)) {
-                    $slotsConsecutivos->push($proximoSlot);
+            if ($index === 0) {
+                $grupoAtual->push($slot);
+            } else {
+                $slotAnterior = $slotsOrdenados[$index - 1];
+                // Se a diferença é exatamente o tamanho do slot, mesmo grupo
+                if ($slot->diffInMinutes($slotAnterior) === $tamanhoSlot) {
+                    $grupoAtual->push($slot);
                 } else {
-                    break;
+                    $grupos->push($grupoAtual);
+                    $grupoAtual = collect([$slot]);
                 }
             }
+        }
+        // Adiciona o último grupo
+        if ($grupoAtual->isNotEmpty()) {
+            $grupos->push($grupoAtual);
+        }
 
-            // Se temos slots consecutivos suficientes, adicionar o horário
-            if ($slotsConsecutivos->count() >= $slotsNecessarios) {
-                $horariosDisponiveis->push([
-                    'inicio' => $slot->format('H:i'),
-                    'fim' => $slot->copy()->addMinutes($duracaoServico)->format('H:i'),
-                    'data_hora_inicio' => $slot->format('Y-m-d H:i:s'),
-                    'data_hora_fim' => $slot->copy()->addMinutes($duracaoServico)->format('Y-m-d H:i:s')
-                ]);
+        // Para cada grupo (jornada), verifica se o serviço cabe
+        foreach ($grupos as $grupo) {
+            // Define o fim dessa jornada (último slot + tamanhoSlot)
+            $ultimoSlot = $grupo->last();
+            $fimDaJornada = $ultimoSlot->copy()->addMinutes($tamanhoSlot);
+
+            foreach ($grupo as $slot) {
+                $horaFimPrevista = $slot->copy()->addMinutes($duracaoServico);
+                if ($horaFimPrevista->lte($fimDaJornada)) {
+                    $horariosDisponiveis->push([
+                        'inicio' => $slot->format('H:i'),
+                        'fim' => $horaFimPrevista->format('H:i'),
+                        'data_hora_inicio' => $slot->format('Y-m-d H:i:s'),
+                        'data_hora_fim' => $horaFimPrevista->format('Y-m-d H:i:s')
+                    ]);
+                }
             }
         }
 
         return $horariosDisponiveis;
     }
+
 
     /**
      * Aplica a regra de antecedência mínima
@@ -235,11 +272,11 @@ class DisponibilidadeService
     {
         $diasDisponiveis = collect();
         $hoje = Carbon::now()->startOfDay();
-
-        for ($i = 0; $i < 7; $i++) {
+        $proximosDias = 7;
+        for ($i = 0; $i < $proximosDias; $i++) {
             $data = $hoje->copy()->addDays($i);
             $horarios = $this->gerarHorariosDisponiveis($empresa, $servico, $data);
-            
+
             if ($horarios->isNotEmpty()) {
                 $diasDisponiveis->push([
                     'data' => $data->format('Y-m-d'),

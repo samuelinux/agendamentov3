@@ -68,12 +68,20 @@ class AgendamentoController extends Controller
         }
 
         $dataHoraInicio = Carbon::parse($request->data_hora_inicio);
+
+        // Verificar se o horário de início não é no passado
+        if ($dataHoraInicio->isPast()) {
+            return back()->withErrors([
+                "data_hora_inicio" => "Não é possível agendar para um horário que já passou."
+            ]);
+        }
+
         $dataHoraFim = $dataHoraInicio->copy()->addMinutes($servico->duracao_minutos);
 
         // Verificar se o horário ainda está disponível
         $horariosDisponiveis = $this->disponibilidadeService->gerarHorariosDisponiveis(
-            $empresa, 
-            $servico, 
+            $empresa,
+            $servico,
             $dataHoraInicio
         );
 
@@ -93,7 +101,7 @@ class AgendamentoController extends Controller
             // Buscar ou criar cliente
             $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone_cliente); // Limpa a máscara
             $cliente = Usuario::where("telefone", $telefoneLimpo)->first();
-            
+
             if (!$cliente) {
                 // Criar novo usuário se não existir
                 $cliente = Usuario::create([
@@ -127,7 +135,7 @@ class AgendamentoController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            
+
             return back()->withErrors([
                 "error" => "Erro ao processar agendamento. Tente novamente."
             ]);
@@ -145,13 +153,13 @@ class AgendamentoController extends Controller
             ]);
 
             $telefone = preg_replace("/\\D/", "", $request->telefone); // Limpa a máscara
-            
+
             // Log para debug
             \Log::info("Verificando telefone: " . $telefone);
 
             // Buscar usuário comparando apenas os números do telefone
             $usuario = Usuario::where("telefone", $telefone)->first();
-            
+
             // Log para debug
             \Log::info("Usuário encontrado: " . ($usuario ? $usuario->nome : "Nenhum"));
 
@@ -160,10 +168,10 @@ class AgendamentoController extends Controller
                 "exists" => (bool) $usuario,
                 "nome" => $usuario ? $usuario->nome : null,
             ]);
-            
+
         } catch (\Exception $e) {
             \Log::error("Erro ao verificar telefone: " . $e->getMessage());
-            
+
             return response()->json([
                 "success" => false,
                 "error" => "Erro interno do servidor",
