@@ -166,6 +166,9 @@ As jornadas são configuráveis por dia da semana (0=Domingo, 1=Segunda, etc.) c
 ### Erro de Permissões
 ```bash
 chmod -R 775 storage bootstrap/cache
+sudo chown -R $USER:$USER storage bootstrap/cache
+chmod -R u+rwX storage bootstrap/cache
+
 ```
 
 ### Erro de Banco de Dados
