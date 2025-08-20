@@ -16,21 +16,16 @@
     </div>
 @else
     @foreach($empresa->servicos->where('ativo', true) as $servico)
-        <div class="service-card">
-            <div class="service-name">{{ $servico->nome }}</div>
-            
-            @if($servico->descricao)
-                <p style="color: #718096; margin-bottom: 1rem;">{{ $servico->descricao }}</p>
-            @endif
-            
-            <div class="service-duration">
-                <strong>Duração:</strong> {{ $servico->duracao_minutos }} minutos
+        <a href="{{ route('agendamento.horarios', [$empresa, $servico]) }}" class="service-card-compact">
+            <div class="service-info">
+                <div class="service-name-compact">{{ $servico->nome }}</div>
+                <div class="service-details">
+                    <span class="service-price">R$ {{ number_format($servico->valor ?? 0, 2, ',', '.') }}</span>
+                    <span class="service-separator">•</span>
+                    <span class="service-duration">{{ $servico->duracao_minutos }} min</span>
+                </div>
             </div>
-            
-            <a href="{{ route('agendamento.horarios', [$empresa, $servico]) }}" class="btn btn-primary">
-                Agendar {{ $servico->nome }}
-            </a>
-        </div>
+        </a>
     @endforeach
 @endif
 

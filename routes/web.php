@@ -5,7 +5,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\EmpresaController;
+use App\Http\Controllers\Admin\EmpresaConfigController;
 use App\Http\Controllers\Admin\ServicoController;
+use App\Http\Controllers\Admin\RelatorioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +24,14 @@ use App\Http\Controllers\Admin\ServicoController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rotas de agendamento
-Route::get('/cancelar-agendamento', [AgendamentoController::class, 'mostrarCancelamento'])->name('agendamento.cancelar');
-Route::post('/cancelar-agendamento', [AgendamentoController::class, 'cancelarAgendamento']);
+Route::get('/cancelar-agendamento', [AgendamentoController::class, 'mostrarLoginCliente'])->name('agendamento.cancelar.form');
+Route::post('/cancelar-agendamento', [AgendamentoController::class, 'cancelarAgendamento'])->name('agendamento.cancelar');
+
+// Rotas da área do cliente
+Route::get('/cliente', [AgendamentoController::class, 'mostrarLoginCliente'])->name('cliente.login');
+Route::post('/cliente', [AgendamentoController::class, 'areaCliente'])->name('cliente.area');
+Route::get('/cliente/area', [AgendamentoController::class, 'areaClienteLogado'])->name('cliente.area.logado');
+Route::post('/cliente/logout', [AgendamentoController::class, 'logoutCliente'])->name('cliente.logout');
 
 // Rotas de administração
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -43,6 +51,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Rotas para Admin da Empresa (gestão de serviços)
         Route::resource('servicos', ServicoController::class)->except(['show']);
         Route::patch('servicos/{servico}/toggle-status', [ServicoController::class, 'toggleStatus'])->name('servicos.toggle-status');
+        
+        // Rotas para configurações da empresa
+        Route::get('empresa-config', [EmpresaConfigController::class, 'edit'])->name('empresa-config.edit');
+        Route::patch('empresa-config', [EmpresaConfigController::class, 'update'])->name('empresa-config.update');
+        
+        // Rotas para relatórios
+        Route::get('relatorios/atendimentos', [RelatorioController::class, 'atendimentos'])->name('relatorios.atendimentos');
     });
 });
 

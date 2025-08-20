@@ -7,10 +7,10 @@
     'url' => 'http://localhost',
     'asset_url' => NULL,
     'timezone' => 'America/Sao_Paulo',
-    'locale' => 'en',
+    'locale' => 'pt_BR',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
-    'key' => 'base64:zbbznXvVWpKC0UTfjChK0iGw5rtpcwU+jU3Qaw2HTRo=',
+    'key' => 'base64:AMLHqP6yUP55ewQC8KJpnKXLJHurLFpf3pomNLUeJLM=',
     'cipher' => 'AES-256-CBC',
     'maintenance' => 
     array (

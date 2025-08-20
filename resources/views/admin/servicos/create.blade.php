@@ -26,6 +26,12 @@
             <small style="color: #7f8c8d;">Tempo necessário para realizar o serviço (de 5 a 480 minutos)</small>
         </div>
         
+        <div class="form-group">
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" class="form-control" value="{{ old('valor') }}" min="0" max="9999.99" step="0.01" required placeholder="0.00">
+            <small style="color: #7f8c8d;">Preço do serviço em reais</small>
+        </div>
+        
         <div style="display: flex; gap: 1rem;">
             <button type="submit" class="btn btn-success">Criar Serviço</button>
             <a href="{{ route('admin.servicos.index') }}" class="btn btn-primary">Cancelar</a>

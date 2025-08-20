@@ -35,12 +35,14 @@ class ServicoController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'duracao_minutos' => 'required|integer|min:5|max:480',
+            'valor' => 'required|numeric|min:0|max:9999.99',
         ]);
 
         auth()->user()->empresa->servicos()->create([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
             'duracao_minutos' => $request->duracao_minutos,
+            'valor' => $request->valor,
             'ativo' => true
         ]);
 
@@ -69,12 +71,14 @@ class ServicoController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
             'duracao_minutos' => 'required|integer|min:5|max:480',
+            'valor' => 'required|numeric|min:0|max:9999.99',
         ]);
 
         $servico->update([
             'nome' => $request->nome,
             'descricao' => $request->descricao,
             'duracao_minutos' => $request->duracao_minutos,
+            'valor' => $request->valor,
         ]);
 
         return redirect()->route('admin.servicos.index')

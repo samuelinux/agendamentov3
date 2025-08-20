@@ -219,6 +219,83 @@
             font-size: 0.9rem;
         }
 
+        /* Estilos para o formato compacto dos serviços */
+        .service-card-compact {
+            display: block;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .service-card-compact:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .service-card-compact:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-info {
+            width: 100%;
+        }
+
+        .service-name-compact {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .service-details {
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            color: #718096;
+            font-weight: 500;
+        }
+
+        .service-price {
+            color: #38a169;
+            font-weight: 600;
+        }
+
+        .service-separator {
+            margin: 0 0.75rem;
+            color: #cbd5e0;
+            font-weight: bold;
+        }
+
+        .service-duration {
+            color: #4a5568;
+        }
+
+        /* Responsividade para telas muito pequenas */
+        @media (max-width: 360px) {
+            .service-card-compact {
+                padding: 1rem;
+            }
+            
+            .service-name-compact {
+                font-size: 1.1rem;
+            }
+            
+            .service-details {
+                font-size: 0.9rem;
+            }
+        }
+
         .back-link {
             display: inline-flex;
             align-items: center;

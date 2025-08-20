@@ -27,6 +27,8 @@
         <h3 style="color: #e74c3c; margin-bottom: 0.5rem;">Ações Rápidas</h3>
         <div style="display: flex; flex-direction: column; gap: 0.5rem;">
             <a href="{{ route('admin.servicos.index') }}" class="btn btn-primary">Gerenciar Serviços</a>
+            <a href="{{ route('admin.empresa-config.edit') }}" class="btn btn-warning">Configurações da Empresa</a>
+            <a href="{{ route('admin.relatorios.atendimentos') }}" class="btn btn-info">Relatórios de Atendimentos</a>
             <a href="{{ route('empresa', $empresa->slug) }}" target="_blank" class="btn btn-success">Ver Site Público</a>
         </div>
     </div>

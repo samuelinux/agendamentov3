@@ -58,14 +58,14 @@
 </div>
 
 <div style="margin-bottom: 1rem;">
-    <a href="{{ route('empresa', $empresa->slug) }}" class="btn btn-primary">
-        Fazer Novo Agendamento
+    <a href="{{ route('cliente.area.logado') }}" class="btn btn-primary">
+        Ver Meus Agendamentos
     </a>
 </div>
 
 <div style="margin-bottom: 1rem;">
-    <a href="{{ route('agendamento.cancelar') }}" class="btn btn-secondary">
-        Cancelar Este Agendamento
+    <a href="{{ route('empresa', $empresa->slug) }}" class="btn btn-secondary">
+        Fazer Novo Agendamento
     </a>
 </div>
 

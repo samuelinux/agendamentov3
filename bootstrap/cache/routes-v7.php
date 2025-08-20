@@ -63,7 +63,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::RWlhREHkPYhQiUtS',
+            '_route' => 'generated::58Y8CpLFkizZ0MC4',
           ),
           1 => NULL,
           2 => 
@@ -83,7 +83,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::x9D1JS0oUE7pTA6j',
+            '_route' => 'generated::J3NhW90GgM2uuCob',
           ),
           1 => NULL,
           2 => 
@@ -180,7 +180,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::eeMItHgcqoaILlpi',
+            '_route' => 'generated::lrtQf8vHPU8pH210',
           ),
           1 => NULL,
           2 => 
@@ -200,7 +200,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::tk93MvRPOFwZRY9a',
+            '_route' => 'generated::tXLHkITAlJ4YgbnB',
           ),
           1 => NULL,
           2 => 
@@ -239,7 +239,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'agendamento.cancelar',
+            '_route' => 'agendamento.cancelar.form',
           ),
           1 => NULL,
           2 => 
@@ -256,7 +256,82 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::UhOFYkNwo3kAhvFs',
+            '_route' => 'agendamento.cancelar',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/cliente' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.login',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.area',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/cliente/area' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.area.logado',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/cliente/logout' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.logout',
           ),
           1 => NULL,
           2 => 
@@ -443,6 +518,62 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'admin.servicos.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/admin/empresa-config' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.empresa-config.edit',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.empresa-config.update',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'PATCH' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/admin/relatorios/atendimentos' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.relatorios.atendimentos',
           ),
           1 => NULL,
           2 => 
@@ -791,7 +922,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::RWlhREHkPYhQiUtS' => 
+    'generated::58Y8CpLFkizZ0MC4' => 
     array (
       'methods' => 
       array (
@@ -803,7 +934,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::RWlhREHkPYhQiUtS',
+        'as' => 'generated::58Y8CpLFkizZ0MC4',
       ),
       'fallback' => false,
       'defaults' => 
@@ -819,7 +950,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::x9D1JS0oUE7pTA6j' => 
+    'generated::J3NhW90GgM2uuCob' => 
     array (
       'methods' => 
       array (
@@ -831,7 +962,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::x9D1JS0oUE7pTA6j',
+        'as' => 'generated::J3NhW90GgM2uuCob',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1011,7 +1142,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::eeMItHgcqoaILlpi' => 
+    'generated::lrtQf8vHPU8pH210' => 
     array (
       'methods' => 
       array (
@@ -1028,13 +1159,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000006ef0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000a040000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::eeMItHgcqoaILlpi',
+        'as' => 'generated::lrtQf8vHPU8pH210',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1050,7 +1181,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::tk93MvRPOFwZRY9a' => 
+    'generated::tXLHkITAlJ4YgbnB' => 
     array (
       'methods' => 
       array (
@@ -1070,7 +1201,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::tk93MvRPOFwZRY9a',
+        'as' => 'generated::tXLHkITAlJ4YgbnB',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1123,7 +1254,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'agendamento.cancelar' => 
+    'agendamento.cancelar.form' => 
     array (
       'methods' => 
       array (
@@ -1137,8 +1268,44 @@ app('router')->setCompiledRoutes(
         array (
           0 => 'web',
         ),
-        'uses' => 'App\\Http\\Controllers\\AgendamentoController@mostrarCancelamento',
-        'controller' => 'App\\Http\\Controllers\\AgendamentoController@mostrarCancelamento',
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@mostrarLoginCliente',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@mostrarLoginCliente',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'agendamento.cancelar.form',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'agendamento.cancelar' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'cancelar-agendamento',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@cancelarAgendamento',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@cancelarAgendamento',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -1160,27 +1327,137 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::UhOFYkNwo3kAhvFs' => 
+    'cliente.login' => 
     array (
       'methods' => 
       array (
-        0 => 'POST',
+        0 => 'GET',
+        1 => 'HEAD',
       ),
-      'uri' => 'cancelar-agendamento',
+      'uri' => 'cliente',
       'action' => 
       array (
         'middleware' => 
         array (
           0 => 'web',
         ),
-        'uses' => 'App\\Http\\Controllers\\AgendamentoController@cancelarAgendamento',
-        'controller' => 'App\\Http\\Controllers\\AgendamentoController@cancelarAgendamento',
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@mostrarLoginCliente',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@mostrarLoginCliente',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::UhOFYkNwo3kAhvFs',
+        'as' => 'cliente.login',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'cliente.area' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'cliente',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@areaCliente',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@areaCliente',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'cliente.area',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'cliente.area.logado' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'cliente/area',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@areaClienteLogado',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@areaClienteLogado',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'cliente.area.logado',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'cliente.logout' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'cliente/logout',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\AgendamentoController@logoutCliente',
+        'controller' => 'App\\Http\\Controllers\\AgendamentoController@logoutCliente',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'cliente.logout',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1812,6 +2089,119 @@ app('router')->setCompiledRoutes(
         'uses' => 'App\\Http\\Controllers\\Admin\\ServicoController@toggleStatus',
         'controller' => 'App\\Http\\Controllers\\Admin\\ServicoController@toggleStatus',
         'as' => 'admin.servicos.toggle-status',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.empresa-config.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/empresa-config',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\EmpresaConfigController@edit',
+        'controller' => 'App\\Http\\Controllers\\Admin\\EmpresaConfigController@edit',
+        'as' => 'admin.empresa-config.edit',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.empresa-config.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PATCH',
+      ),
+      'uri' => 'admin/empresa-config',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\EmpresaConfigController@update',
+        'controller' => 'App\\Http\\Controllers\\Admin\\EmpresaConfigController@update',
+        'as' => 'admin.empresa-config.update',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.relatorios.atendimentos' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/relatorios/atendimentos',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\RelatorioController@atendimentos',
+        'controller' => 'App\\Http\\Controllers\\Admin\\RelatorioController@atendimentos',
+        'as' => 'admin.relatorios.atendimentos',
         'namespace' => NULL,
         'prefix' => '/admin',
         'where' => 

@@ -68,7 +68,7 @@ class AgendamentoController extends Controller
         }
 
         $dataHoraInicio = Carbon::parse($request->data_hora_inicio);
-
+        
         // Verificar se o horário de início não é no passado
         if ($dataHoraInicio->isPast()) {
             return back()->withErrors([
@@ -80,8 +80,8 @@ class AgendamentoController extends Controller
 
         // Verificar se o horário ainda está disponível
         $horariosDisponiveis = $this->disponibilidadeService->gerarHorariosDisponiveis(
-            $empresa,
-            $servico,
+            $empresa, 
+            $servico, 
             $dataHoraInicio
         );
 
@@ -101,7 +101,7 @@ class AgendamentoController extends Controller
             // Buscar ou criar cliente
             $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone_cliente); // Limpa a máscara
             $cliente = Usuario::where("telefone", $telefoneLimpo)->first();
-
+            
             if (!$cliente) {
                 // Criar novo usuário se não existir
                 $cliente = Usuario::create([
@@ -128,14 +128,14 @@ class AgendamentoController extends Controller
 
             DB::commit();
 
-            // Autenticar o cliente após o agendamento
-            Auth::login($cliente);
+            // Persistir o telefone do cliente na sessão para manter "logado"
+            session(['cliente_telefone' => $telefoneLimpo]);
 
             return view("agendamento.confirmacao", compact("agendamento", "empresa", "servico", "cliente"));
 
         } catch (\Exception $e) {
             DB::rollback();
-
+            
             return back()->withErrors([
                 "error" => "Erro ao processar agendamento. Tente novamente."
             ]);
@@ -153,13 +153,13 @@ class AgendamentoController extends Controller
             ]);
 
             $telefone = preg_replace("/\\D/", "", $request->telefone); // Limpa a máscara
-
+            
             // Log para debug
             \Log::info("Verificando telefone: " . $telefone);
 
             // Buscar usuário comparando apenas os números do telefone
             $usuario = Usuario::where("telefone", $telefone)->first();
-
+            
             // Log para debug
             \Log::info("Usuário encontrado: " . ($usuario ? $usuario->nome : "Nenhum"));
 
@@ -168,10 +168,10 @@ class AgendamentoController extends Controller
                 "exists" => (bool) $usuario,
                 "nome" => $usuario ? $usuario->nome : null,
             ]);
-
+            
         } catch (\Exception $e) {
             \Log::error("Erro ao verificar telefone: " . $e->getMessage());
-
+            
             return response()->json([
                 "success" => false,
                 "error" => "Erro interno do servidor",
@@ -209,8 +209,11 @@ class AgendamentoController extends Controller
 
         $agendamento->update(["status" => "cancelado"]);
 
-        return redirect()->route("empresa", $agendamento->empresa->slug)
-            ->with("success", "Agendamento cancelado com sucesso!");
+        // Persistir o telefone do cliente na sessão para manter "logado"
+        $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone);
+        session(['cliente_telefone' => $telefoneLimpo]);
+
+        return back()->with("success", "Agendamento cancelado com sucesso!");
     }
 
     /**
@@ -219,6 +222,82 @@ class AgendamentoController extends Controller
     public function mostrarCancelamento()
     {
         return view("agendamento.cancelamento");
+    }
+
+    /**
+     * Mostra formulário de login da área do cliente
+     */
+    public function mostrarLoginCliente()
+    {
+        return view("cliente.login");
+    }
+
+    /**
+     * Processa o login e exibe a área do cliente
+     */
+    public function areaCliente(Request $request)
+    {
+        $request->validate([
+            "telefone" => "required|string|max:20",
+        ]);
+
+        $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone);
+        
+        $cliente = Usuario::where("telefone", $telefoneLimpo)->first();
+
+        if (!$cliente) {
+            return back()->withErrors([
+                "telefone" => "Nenhum agendamento encontrado para este telefone."
+            ])->withInput();
+        }
+
+        // Persistir o telefone do cliente na sessão para manter "logado"
+        session(['cliente_telefone' => $telefoneLimpo]);
+
+        // Buscar todos os agendamentos do cliente, ordenados por data
+        $agendamentos = Agendamento::with(["empresa", "servico"])
+            ->where("usuario_id", $cliente->id)
+            ->orderBy("data_hora_inicio", "desc")
+            ->get();
+
+        return view("cliente.area", compact("cliente", "agendamentos"));
+    }
+
+    /**
+     * Verifica se há cliente logado na sessão e exibe a área do cliente
+     */
+    public function areaClienteLogado()
+    {
+        $telefoneLogado = session('cliente_telefone');
+        
+        if (!$telefoneLogado) {
+            return redirect()->route('cliente.login');
+        }
+
+        $cliente = Usuario::where("telefone", $telefoneLogado)->first();
+
+        if (!$cliente) {
+            // Se o cliente não existe mais, limpar a sessão
+            session()->forget('cliente_telefone');
+            return redirect()->route('cliente.login');
+        }
+
+        // Buscar todos os agendamentos do cliente, ordenados por data
+        $agendamentos = Agendamento::with(["empresa", "servico"])
+            ->where("usuario_id", $cliente->id)
+            ->orderBy("data_hora_inicio", "desc")
+            ->get();
+
+        return view("cliente.area", compact("cliente", "agendamentos"));
+    }
+
+    /**
+     * Faz logout do cliente (limpa a sessão)
+     */
+    public function logoutCliente()
+    {
+        session()->forget('cliente_telefone');
+        return redirect()->route('cliente.login')->with('success', 'Logout realizado com sucesso!');
     }
 }
 

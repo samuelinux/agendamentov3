@@ -14,6 +14,7 @@ class Servico extends Model
         'nome',
         'descricao',
         'duracao_minutos',
+        'valor',
         'ativo'
     ];
 

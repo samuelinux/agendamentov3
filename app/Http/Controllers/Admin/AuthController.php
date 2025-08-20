@@ -22,16 +22,14 @@ class AuthController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
-
-        //dd($request);
-
+        
         // Tentar autenticar apenas usuários do tipo admin
         if (Auth::guard('web')->attempt($credentials)) {
             $user = Auth::user();
-
+            
             if ($user->tipo === 'admin') {
                 $request->session()->regenerate();
-
+                
                 // Redirecionar baseado no tipo de admin
                 if ($user->empresa_id === null) {
                     // Super Admin
@@ -58,26 +56,26 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
+        
         return redirect()->route('admin.login');
     }
 
     public function dashboard()
     {
         $user = Auth::user();
-
+        
         if ($user->empresa_id === null) {
             // Super Admin - redirecionar para gestão de empresas
             return redirect()->route('admin.empresas.index');
         }
-
+        
         // Admin da Empresa - mostrar dashboard
         $empresa = $user->empresa;
         $agendamentosHoje = $empresa->agendamentos()
             ->whereDate('data_hora_inicio', today())
             ->confirmados()
             ->count();
-
+            
         return view('admin.dashboard', compact('empresa', 'agendamentosHoje'));
     }
 }

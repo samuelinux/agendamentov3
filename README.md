@@ -165,9 +165,12 @@ As jornadas são configuráveis por dia da semana (0=Domingo, 1=Segunda, etc.) c
 
 ### Erro de Permissões
 ```bash
+sudo chown samuel:samuel .env
 sudo chmod -R 775 storage bootstrap/cache
 sudo chown -R $USER:$USER storage bootstrap/cache
 sudo chmod -R u+rwX storage bootstrap/cache
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
 
 ```
 
@@ -181,6 +184,8 @@ php artisan migrate:fresh --seed
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
+
+php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear
 ```
 
 ## 📝 Licença
