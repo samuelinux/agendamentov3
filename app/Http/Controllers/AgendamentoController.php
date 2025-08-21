@@ -39,7 +39,8 @@ class AgendamentoController extends Controller
 
         $diasDisponiveis = $this->disponibilidadeService->obterProximosDiasDisponiveis($empresa, $servico);
 
-        return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis"));
+        $telefoneLogado = session('cliente_telefone');
+        return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis", "telefoneLogado"));
     }
 
     /**
@@ -225,10 +226,26 @@ class AgendamentoController extends Controller
     }
 
     /**
-     * Mostra formulário de login da área do cliente
+     * Mostra formulário de login da área do cliente ou redireciona se já estiver logado
      */
     public function mostrarLoginCliente()
     {
+        // Verificar se o cliente já está logado na sessão
+        $telefoneLogado = session('cliente_telefone');
+        
+        if ($telefoneLogado) {
+            $cliente = Usuario::where("telefone", $telefoneLogado)->first();
+            
+            if ($cliente) {
+                // Cliente está logado, redirecionar para a área do cliente
+                return redirect()->route('cliente.area.logado');
+            } else {
+                // Cliente não existe mais, limpar a sessão
+                session()->forget('cliente_telefone');
+            }
+        }
+        
+        // Cliente não está logado, mostrar formulário de login
         return view("cliente.login");
     }
 

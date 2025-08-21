@@ -254,7 +254,9 @@
             <nav class="nav">
                 <ul>
                     <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-                    <li><a href="{{ route('admin.servicos.index') }}" class="{{ request()->routeIs('admin.servicos.*') ? 'active' : '' }}">Serviços</a></li>
+                    <li><a href="{{ route("admin.servicos.index") }}" class="{{ request()->routeIs("admin.servicos.*") ? "active" : "" }}">Serviços</a></li>
+                    <li><a href="{{ route("admin.relatorios.atendimentos") }}" class="{{ request()->routeIs("admin.relatorios.*") ? "active" : "" }}">Relatórios</a></li>
+                    <li><a href="{{ route("admin.wpp.config.form") }}" class="{{ request()->routeIs("admin.wpp.*") ? "active" : "" }}">WhatsApp</a></li>
                 </ul>
             </nav>
         @endif

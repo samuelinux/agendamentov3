@@ -63,7 +63,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::58Y8CpLFkizZ0MC4',
+            '_route' => 'generated::mCImm012Cx9LrX46',
           ),
           1 => NULL,
           2 => 
@@ -83,7 +83,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::J3NhW90GgM2uuCob',
+            '_route' => 'generated::5t0kxsDH8ZGuON9U',
           ),
           1 => NULL,
           2 => 
@@ -180,7 +180,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::lrtQf8vHPU8pH210',
+            '_route' => 'generated::n6mDCQssPULOy0Yu',
           ),
           1 => NULL,
           2 => 
@@ -200,7 +200,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::tXLHkITAlJ4YgbnB',
+            '_route' => 'generated::OIDqZcnELDYe7hTj',
           ),
           1 => NULL,
           2 => 
@@ -567,6 +567,42 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/admin/working-hours' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.working_hours.form',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.working_hours.save',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/admin/relatorios/atendimentos' => 
       array (
         0 => 
@@ -580,6 +616,78 @@ app('router')->setCompiledRoutes(
           array (
             'GET' => 0,
             'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/admin/wpp/config' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.wpp.config.form',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.wpp.config.save',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/webhook/whatsapp' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'webhook.whatsapp.verify',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'webhook.whatsapp.handle',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
           ),
           3 => NULL,
           4 => false,
@@ -922,7 +1030,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::58Y8CpLFkizZ0MC4' => 
+    'generated::mCImm012Cx9LrX46' => 
     array (
       'methods' => 
       array (
@@ -934,7 +1042,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::58Y8CpLFkizZ0MC4',
+        'as' => 'generated::mCImm012Cx9LrX46',
       ),
       'fallback' => false,
       'defaults' => 
@@ -950,7 +1058,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::J3NhW90GgM2uuCob' => 
+    'generated::5t0kxsDH8ZGuON9U' => 
     array (
       'methods' => 
       array (
@@ -962,7 +1070,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::J3NhW90GgM2uuCob',
+        'as' => 'generated::5t0kxsDH8ZGuON9U',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1142,7 +1250,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::lrtQf8vHPU8pH210' => 
+    'generated::n6mDCQssPULOy0Yu' => 
     array (
       'methods' => 
       array (
@@ -1159,13 +1267,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"0000000000000a040000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009f30000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::lrtQf8vHPU8pH210',
+        'as' => 'generated::n6mDCQssPULOy0Yu',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1181,7 +1289,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::tXLHkITAlJ4YgbnB' => 
+    'generated::OIDqZcnELDYe7hTj' => 
     array (
       'methods' => 
       array (
@@ -1201,7 +1309,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::tXLHkITAlJ4YgbnB',
+        'as' => 'generated::OIDqZcnELDYe7hTj',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2184,6 +2292,81 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'admin.working_hours.form' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/working-hours',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\AuthController@showWorkingHoursForm',
+        'controller' => 'App\\Http\\Controllers\\Admin\\AuthController@showWorkingHoursForm',
+        'as' => 'admin.working_hours.form',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.working_hours.save' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/working-hours',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\AuthController@saveWorkingHours',
+        'controller' => 'App\\Http\\Controllers\\Admin\\AuthController@saveWorkingHours',
+        'as' => 'admin.working_hours.save',
+        'namespace' => NULL,
+        'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'admin.relatorios.atendimentos' => 
     array (
       'methods' => 
@@ -2204,6 +2387,154 @@ app('router')->setCompiledRoutes(
         'as' => 'admin.relatorios.atendimentos',
         'namespace' => NULL,
         'prefix' => '/admin',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.wpp.config.form' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'admin/wpp/config',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Wpp\\WaConfigController@showForm',
+        'controller' => 'App\\Http\\Controllers\\Wpp\\WaConfigController@showForm',
+        'as' => 'admin.wpp.config.form',
+        'namespace' => NULL,
+        'prefix' => 'admin/wpp',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.wpp.config.save' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/wpp/config',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Wpp\\WaConfigController@save',
+        'controller' => 'App\\Http\\Controllers\\Wpp\\WaConfigController@save',
+        'as' => 'admin.wpp.config.save',
+        'namespace' => NULL,
+        'prefix' => 'admin/wpp',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'webhook.whatsapp.verify' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'webhook/whatsapp',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Wpp\\WebhookController@verify',
+        'controller' => 'App\\Http\\Controllers\\Wpp\\WebhookController@verify',
+        'as' => 'webhook.whatsapp.verify',
+        'namespace' => NULL,
+        'prefix' => '/webhook/whatsapp',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'webhook.whatsapp.handle' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'webhook/whatsapp',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Wpp\\WebhookController@handle',
+        'controller' => 'App\\Http\\Controllers\\Wpp\\WebhookController@handle',
+        'as' => 'webhook.whatsapp.handle',
+        'namespace' => NULL,
+        'prefix' => '/webhook/whatsapp',
         'where' => 
         array (
         ),

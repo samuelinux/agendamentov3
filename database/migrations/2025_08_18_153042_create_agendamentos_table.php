@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('servico_id')->constrained('servicos')->onDelete('cascade');
             $table->dateTime('data_hora_inicio');
             $table->dateTime('data_hora_fim');
-            $table->enum('status', ['confirmado', 'cancelado'])->default('confirmado');
+            $table->enum('status', ['confirmado', 'cancelado', 'realizado', 'agendado'])->default('confirmado');
             $table->timestamps();
         });
     }
@@ -31,3 +31,5 @@ return new class extends Migration
         Schema::dropIfExists('agendamentos');
     }
 };
+
+

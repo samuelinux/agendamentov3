@@ -35,7 +35,7 @@ class Usuario extends Authenticatable
 
     public function agendamentos()
     {
-        return $this->hasMany(Agendamento::class, 'cliente_id');
+        return $this->hasMany(Agendamento::class, 'usuario_id');
     }
 
     // Scopes

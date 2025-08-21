@@ -11,10 +11,6 @@
         <p><strong>Nenhum agendamento encontrado</strong></p>
         <p>Você não possui agendamentos cadastrados com este telefone.</p>
     </div>
-
-    <a href="{{ url('/') }}" class="btn btn-primary">
-        Fazer novo agendamento
-    </a>
 @else
     <div style="margin-bottom: 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
@@ -44,14 +40,14 @@
                         {{ $agendamento->servico->nome }}
                     </div>
                 </div>
-
+                
                 @php
                     $dataAgendamento = \Carbon\Carbon::parse($agendamento->data_hora_inicio);
                     $agora = \Carbon\Carbon::now();
                     $podeSerCancelado = $dataAgendamento->isFuture() && $agendamento->status === 'confirmado';
                     $jaPassou = $dataAgendamento->isPast();
                 @endphp
-
+                
                 <div style="text-align: right;">
                     @if($agendamento->status === 'confirmado')
                         @if($podeSerCancelado)
@@ -70,7 +66,7 @@
                     @endif
                 </div>
             </div>
-
+            
             <div style="background: #f7fafc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
                     <div>
@@ -99,10 +95,10 @@
                     </div>
                 </div>
             </div>
-
+            
             @if($podeSerCancelado)
-                <form method="POST" action="{{ route('agendamento.cancelar') }}"
-                      onsubmit="return confirm('Tem certeza que deseja cancelar este agendamento?')"
+                <form method="POST" action="{{ route('agendamento.cancelar') }}" 
+                      onsubmit="return confirm('Tem certeza que deseja cancelar este agendamento?')" 
                       style="margin-top: 1rem;">
                     @csrf
                     <input type="hidden" name="agendamento_id" value="{{ $agendamento->id }}">
@@ -114,13 +110,94 @@
             @endif
         </div>
     @endforeach
-
-    <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;">
-        <a href="{{ url('/') }}" class="btn btn-primary">
-            Fazer novo agendamento
-        </a>
-    </div>
 @endif
+
+<!-- Botão flutuante "Fazer novo agendamento" -->
+<div class="floating-button">
+    <a href="{{ url('/') }}" class="btn-floating">
+        <span class="btn-floating-icon">+</span>
+        <span class="btn-floating-text">Fazer novo agendamento</span>
+    </a>
+</div>
+
+<style>
+.floating-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: calc(100% - 40px);
+    max-width: 400px;
+}
+
+.btn-floating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #38a169, #2f855a);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-floating:hover {
+    background: linear-gradient(135deg, #2f855a, #276749);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(56, 161, 105, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-floating:active {
+    transform: translateY(0);
+    box-shadow: 0 6px 20px rgba(56, 161, 105, 0.3);
+}
+
+.btn-floating-icon {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-floating-text {
+    font-size: 16px;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .floating-button {
+        bottom: 15px;
+        width: calc(100% - 30px);
+    }
+    
+    .btn-floating {
+        padding: 14px 20px;
+        font-size: 15px;
+    }
+    
+    .btn-floating-icon {
+        font-size: 18px;
+    }
+    
+    .btn-floating-text {
+        font-size: 15px;
+    }
+}
+
+/* Garantir espaço para o botão flutuante */
+body {
+    padding-bottom: 100px;
+}
+</style>
 
 @endsection
 

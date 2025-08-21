@@ -53,12 +53,28 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('servicos/{servico}/toggle-status', [ServicoController::class, 'toggleStatus'])->name('servicos.toggle-status');
         
         // Rotas para configurações da empresa
-        Route::get('empresa-config', [EmpresaConfigController::class, 'edit'])->name('empresa-config.edit');
-        Route::patch('empresa-config', [EmpresaConfigController::class, 'update'])->name('empresa-config.update');
+        Route::get("empresa-config", [EmpresaConfigController::class, "edit"])->name("empresa-config.edit");
+        Route::patch("empresa-config", [EmpresaConfigController::class, "update"])->name("empresa-config.update");
+        
+        // Rotas para carga horária
+        Route::get("working-hours", [AuthController::class, "showWorkingHoursForm"])->name("working_hours.form");
+        Route::post("working-hours", [AuthController::class, "saveWorkingHours"])->name("working_hours.save");
         
         // Rotas para relatórios
-        Route::get('relatorios/atendimentos', [RelatorioController::class, 'atendimentos'])->name('relatorios.atendimentos');
+        Route::get("relatorios/atendimentos", [RelatorioController::class, "atendimentos"])->name("relatorios.atendimentos");
+
+        // Rotas para configurações do WhatsApp
+        Route::prefix("wpp")->name("wpp.")->group(function () {
+            Route::get("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "showForm"])->name("config.form");
+            Route::post("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "save"])->name("config.save");
+        });
     });
+});
+
+// Rotas públicas para webhooks do WhatsApp (sem autenticação)
+Route::prefix("webhook/whatsapp")->name("webhook.whatsapp.")->group(function () {
+    Route::get("/", [\App\Http\Controllers\Wpp\WebhookController::class, "verify"])->name("verify");
+    Route::post("/", [\App\Http\Controllers\Wpp\WebhookController::class, "handle"])->name("handle");
 });
 
 // Rotas da empresa (devem ficar por último para não conflitar)

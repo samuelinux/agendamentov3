@@ -12,13 +12,19 @@ class Empresa extends Model
     protected $fillable = [
         'nome',
         'slug',
+        'status',
+        'telefone',
+        'endereco',
+        'cidade',
+        'estado',
+        'cep',
         'tamanho_slot_minutos',
         'antecedencia_minima_horas',
-        'ativo'
+        'status'
     ];
 
     protected $casts = [
-        'ativo' => 'boolean',
+         'status' => 'boolean',
     ];
 
     // Relacionamentos
@@ -45,5 +51,10 @@ class Empresa extends Model
     public function excecoesAgenda()
     {
         return $this->hasMany(ExcecaoAgenda::class);
+    }
+
+    public function waConfig()
+    {
+        return $this->hasOne(WaConfig::class);
     }
 }

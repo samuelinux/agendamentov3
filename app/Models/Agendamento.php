@@ -16,7 +16,8 @@ class Agendamento extends Model
         'servico_id',
         'data_hora_inicio',
         'data_hora_fim',
-        'status'
+        'status',
+        'observacoes'
     ];
 
     protected $casts = [
