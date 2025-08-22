@@ -2195,3 +2195,15 @@ Trailing data at /home/ubuntu/sistema-agendamento/vendor/nesbot/carbon/src/Carbo
 [2025-08-21 11:44:55] local.INFO: Usuário encontrado: Nenhum  
 [2025-08-21 14:14:00] local.INFO: Verificando telefone: 11555555555  
 [2025-08-21 14:14:00] local.INFO: Usuário encontrado: Nenhum  
+[2025-08-22 11:08:51] local.INFO: Verificando telefone: 11555555555  
+[2025-08-22 11:08:51] local.INFO: Usuário encontrado: Nenhum  
+[2025-08-22 11:11:51] local.INFO: Verificando telefone: 11555555555  
+[2025-08-22 11:11:51] local.INFO: Usuário encontrado: Maria  
+[2025-08-22 11:12:07] local.INFO: Verificando telefone: 11555555555  
+[2025-08-22 11:12:07] local.INFO: Usuário encontrado: Maria  
+[2025-08-22 13:15:49] local.INFO: Verificando telefone: 11555555555  
+[2025-08-22 13:15:49] local.INFO: Usuário encontrado: Maria  
+[2025-08-22 13:17:01] local.INFO: Verificando telefone: 11555555555  
+[2025-08-22 13:17:01] local.INFO: Usuário encontrado: Maria  
+[2025-08-22 16:27:09] local.INFO: Verificando telefone: 28999673526  
+[2025-08-22 16:27:09] local.INFO: Usuário encontrado: Nenhum  
