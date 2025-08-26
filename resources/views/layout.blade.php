@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 480px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 1rem;
             min-height: 100vh;
@@ -173,7 +173,7 @@
         .service-duration {
             color: #718096;
             font-size: 0.9rem;
-            margin-bottom: 1rem;
+
         }
 
         .time-slot {
@@ -217,6 +217,7 @@
             padding: 1rem;
             color: rgba(255, 255, 255, 0.8);
             font-size: 0.9rem;
+            padding-bottom: 5rem;
         }
 
         /* Estilos para o formato compacto dos serviços */
@@ -225,12 +226,13 @@
             background: #f7fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1.25rem;
+            padding: 1rem;
             margin-bottom: 1rem;
             text-decoration: none;
             color: inherit;
             transition: all 0.2s ease;
             cursor: pointer;
+            text-align: center;
         }
 
         .service-card-compact:hover {
@@ -254,21 +256,23 @@
             font-size: 1.25rem;
             font-weight: 600;
             color: #2d3748;
-            margin-bottom: 0.5rem;
             line-height: 1.3;
+            text-align: center;
+            align-items: center;
         }
 
         .service-details {
-            display: flex;
             align-items: center;
             font-size: 1rem;
             color: #718096;
             font-weight: 500;
+            text-align: center;
         }
 
         .service-price {
             color: #38a169;
             font-weight: 600;
+            text-align: center;
         }
 
         .service-separator {
@@ -286,11 +290,11 @@
             .service-card-compact {
                 padding: 1rem;
             }
-            
+
             .service-name-compact {
                 font-size: 1.1rem;
             }
-            
+
             .service-details {
                 font-size: 0.9rem;
             }
@@ -313,7 +317,7 @@
             .container {
                 padding: 0.5rem;
             }
-            
+
             .header, .main-content {
                 padding: 1rem;
             }
@@ -355,11 +359,12 @@
             @yield('content')
         </div>
 
-        <div class="footer">
+        <div class="footer" id="page-footer">
             <p>&copy; {{ date('Y') }} Sistema de Agendamento</p>
         </div>
     </div>
-
+    {{-- FAB fora da .container, filho direto de <body> --}}
+    @yield('fab')
     @yield('scripts')
 </body>
 </html>

@@ -63,7 +63,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::p6tdx8sZvP98doBi',
+            '_route' => 'generated::fU8QxejrUjq8wsbZ',
           ),
           1 => NULL,
           2 => 
@@ -83,7 +83,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::N6IA3U1GnF9lTXku',
+            '_route' => 'generated::3ieQK7LwUm9WqzHk',
           ),
           1 => NULL,
           2 => 
@@ -180,7 +180,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::2crK1p1onTlUCWvE',
+            '_route' => 'generated::ADf6dA9KJJ6owkt7',
           ),
           1 => NULL,
           2 => 
@@ -200,7 +200,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::t87j5Kk1TvGikulU',
+            '_route' => 'generated::x5IctweqVsra4TSb',
           ),
           1 => NULL,
           2 => 
@@ -239,99 +239,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'agendamento.cancelar.form',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-        1 => 
-        array (
-          0 => 
-          array (
             '_route' => 'agendamento.cancelar',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'POST' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/cliente' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'cliente.login',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-        1 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'cliente.area',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'POST' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/cliente/area' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'cliente.area.logado',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      '/cliente/logout' => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'cliente.logout',
           ),
           1 => NULL,
           2 => 
@@ -698,7 +606,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/livewire/preview\\-file/([^/]++)(*:39)|/admin/(?|empresas/([^/]++)(?|/(?|edit(*:84)|toggle\\-status(*:105))|(*:114))|servicos/([^/]++)(?|/(?|edit(*:151)|toggle\\-status(*:173))|(*:182)))|/([^/]++)(?|(*:204)|/([^/]++)/agendar(?|(*:232))))/?$}sDu',
+      0 => '{^(?|/livewire/preview\\-file/([^/]++)(*:39)|/([^/]++)/c(?|ancelar\\-agendamento(*:80)|liente(?|(*:96)|/(?|area(*:111)|logout(*:125))))|/admin/(?|empresas/([^/]++)(?|/(?|edit(*:174)|toggle\\-status(*:196))|(*:205))|servicos/([^/]++)(?|/(?|edit(*:242)|toggle\\-status(*:264))|(*:273)))|/([^/]++)(?|(*:295)|/([^/]++)/agendar(?|(*:323))))/?$}sDu',
     ),
     3 => 
     array (
@@ -725,7 +633,117 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      84 => 
+      80 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'agendamento.cancelar.form',
+          ),
+          1 => 
+          array (
+            0 => 'empresa',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      96 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.login',
+          ),
+          1 => 
+          array (
+            0 => 'empresa',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.area',
+          ),
+          1 => 
+          array (
+            0 => 'empresa',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      111 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.area.logado',
+          ),
+          1 => 
+          array (
+            0 => 'empresa',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      125 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'cliente.logout',
+          ),
+          1 => 
+          array (
+            0 => 'empresa',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      174 => 
       array (
         0 => 
         array (
@@ -748,7 +766,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      105 => 
+      196 => 
       array (
         0 => 
         array (
@@ -770,7 +788,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      114 => 
+      205 => 
       array (
         0 => 
         array (
@@ -793,7 +811,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      151 => 
+      242 => 
       array (
         0 => 
         array (
@@ -816,7 +834,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      173 => 
+      264 => 
       array (
         0 => 
         array (
@@ -838,7 +856,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      182 => 
+      273 => 
       array (
         0 => 
         array (
@@ -880,7 +898,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      204 => 
+      295 => 
       array (
         0 => 
         array (
@@ -903,7 +921,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      232 => 
+      323 => 
       array (
         0 => 
         array (
@@ -1030,7 +1048,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::p6tdx8sZvP98doBi' => 
+    'generated::fU8QxejrUjq8wsbZ' => 
     array (
       'methods' => 
       array (
@@ -1042,7 +1060,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::p6tdx8sZvP98doBi',
+        'as' => 'generated::fU8QxejrUjq8wsbZ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1058,7 +1076,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::N6IA3U1GnF9lTXku' => 
+    'generated::3ieQK7LwUm9WqzHk' => 
     array (
       'methods' => 
       array (
@@ -1070,7 +1088,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::N6IA3U1GnF9lTXku',
+        'as' => 'generated::3ieQK7LwUm9WqzHk',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1250,7 +1268,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::2crK1p1onTlUCWvE' => 
+    'generated::ADf6dA9KJJ6owkt7' => 
     array (
       'methods' => 
       array (
@@ -1267,13 +1285,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:77:"function (\\Illuminate\\Http\\Request $request) {
     return $request->user();
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009f30000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000006ef0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => 'api',
         'where' => 
         array (
         ),
-        'as' => 'generated::2crK1p1onTlUCWvE',
+        'as' => 'generated::ADf6dA9KJJ6owkt7',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1289,7 +1307,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::t87j5Kk1TvGikulU' => 
+    'generated::x5IctweqVsra4TSb' => 
     array (
       'methods' => 
       array (
@@ -1309,7 +1327,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::t87j5Kk1TvGikulU',
+        'as' => 'generated::x5IctweqVsra4TSb',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1369,7 +1387,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'cancelar-agendamento',
+      'uri' => '{empresa}/cancelar-agendamento',
       'action' => 
       array (
         'middleware' => 
@@ -1394,6 +1412,7 @@ app('router')->setCompiledRoutes(
       ),
       'bindingFields' => 
       array (
+        'empresa' => 'slug',
       ),
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
@@ -1442,7 +1461,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'cliente',
+      'uri' => '{empresa}/cliente',
       'action' => 
       array (
         'middleware' => 
@@ -1467,6 +1486,7 @@ app('router')->setCompiledRoutes(
       ),
       'bindingFields' => 
       array (
+        'empresa' => 'slug',
       ),
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
@@ -1478,7 +1498,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'POST',
       ),
-      'uri' => 'cliente',
+      'uri' => '{empresa}/cliente',
       'action' => 
       array (
         'middleware' => 
@@ -1503,6 +1523,7 @@ app('router')->setCompiledRoutes(
       ),
       'bindingFields' => 
       array (
+        'empresa' => 'slug',
       ),
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
@@ -1515,7 +1536,7 @@ app('router')->setCompiledRoutes(
         0 => 'GET',
         1 => 'HEAD',
       ),
-      'uri' => 'cliente/area',
+      'uri' => '{empresa}/cliente/area',
       'action' => 
       array (
         'middleware' => 
@@ -1540,6 +1561,7 @@ app('router')->setCompiledRoutes(
       ),
       'bindingFields' => 
       array (
+        'empresa' => 'slug',
       ),
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,
@@ -1551,7 +1573,7 @@ app('router')->setCompiledRoutes(
       array (
         0 => 'POST',
       ),
-      'uri' => 'cliente/logout',
+      'uri' => '{empresa}/cliente/logout',
       'action' => 
       array (
         'middleware' => 
@@ -1576,6 +1598,7 @@ app('router')->setCompiledRoutes(
       ),
       'bindingFields' => 
       array (
+        'empresa' => 'slug',
       ),
       'lockSeconds' => NULL,
       'waitSeconds' => NULL,

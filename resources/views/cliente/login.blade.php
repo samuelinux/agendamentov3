@@ -8,7 +8,7 @@
 
 <form method="POST" action="{{ route('cliente.area') }}">
     @csrf
-    
+
     <div class="form-group">
         <label for="telefone_cliente">Telefone (WhatsApp):</label>
         <input type="tel" id="telefone_cliente" name="telefone" class="form-control" maxlength="15"
@@ -17,11 +17,11 @@
             Digite o mesmo telefone usado nos agendamentos
         </small>
     </div>
-    
+
     <button type="submit" class="btn btn-primary">
         Acessar Meus Agendamentos
     </button>
-    
+
     <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;">
         <a href="{{ url('/') }}" class="btn btn-secondary">
             ← Voltar para início

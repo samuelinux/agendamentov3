@@ -24,14 +24,14 @@ use App\Http\Controllers\Admin\RelatorioController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rotas de agendamento
-Route::get('/cancelar-agendamento', [AgendamentoController::class, 'mostrarLoginCliente'])->name('agendamento.cancelar.form');
+Route::get('/{empresa:slug}/cancelar-agendamento', [AgendamentoController::class, 'mostrarLoginCliente'])->name('agendamento.cancelar.form');
 Route::post('/cancelar-agendamento', [AgendamentoController::class, 'cancelarAgendamento'])->name('agendamento.cancelar');
 
 // Rotas da área do cliente
-Route::get('/cliente', [AgendamentoController::class, 'mostrarLoginCliente'])->name('cliente.login');
-Route::post('/cliente', [AgendamentoController::class, 'areaCliente'])->name('cliente.area');
-Route::get('/cliente/area', [AgendamentoController::class, 'areaClienteLogado'])->name('cliente.area.logado');
-Route::post('/cliente/logout', [AgendamentoController::class, 'logoutCliente'])->name('cliente.logout');
+Route::get('/{empresa:slug}/cliente', [AgendamentoController::class, 'mostrarLoginCliente'])->name('cliente.login');
+Route::post('/{empresa:slug}/cliente', [AgendamentoController::class, 'areaCliente'])->name('cliente.area');
+Route::get('/{empresa:slug}/cliente/area', [AgendamentoController::class, 'areaClienteLogado'])->name('cliente.area.logado');
+Route::post('/{empresa:slug}/cliente/logout', [AgendamentoController::class, 'logoutCliente'])->name('cliente.logout');
 
 // Rotas de administração
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -39,27 +39,27 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('login', [AuthController::class, 'login']);
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-    
+
     // Rotas protegidas por autenticação
     Route::middleware('auth')->group(function () {
         Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-        
+
         // Rotas para Super Admin (gestão de empresas)
         Route::resource('empresas', EmpresaController::class)->except(['show', 'destroy']);
         Route::patch('empresas/{empresa}/toggle-status', [EmpresaController::class, 'toggleStatus'])->name('empresas.toggle-status');
-        
+
         // Rotas para Admin da Empresa (gestão de serviços)
         Route::resource('servicos', ServicoController::class)->except(['show']);
         Route::patch('servicos/{servico}/toggle-status', [ServicoController::class, 'toggleStatus'])->name('servicos.toggle-status');
-        
+
         // Rotas para configurações da empresa
         Route::get("empresa-config", [EmpresaConfigController::class, "edit"])->name("empresa-config.edit");
         Route::patch("empresa-config", [EmpresaConfigController::class, "update"])->name("empresa-config.update");
-        
+
         // Rotas para carga horária
         Route::get("working-hours", [AuthController::class, "showWorkingHoursForm"])->name("working_hours.form");
         Route::post("working-hours", [AuthController::class, "saveWorkingHours"])->name("working_hours.save");
-        
+
         // Rotas para relatórios
         Route::get("relatorios/atendimentos", [RelatorioController::class, "atendimentos"])->name("relatorios.atendimentos");
 
