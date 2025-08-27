@@ -52,7 +52,7 @@
 
 <div style="margin-top: 2rem; padding-top: 1rem; border-top: 2px solid #e2e8f0;">
     <h3 style="margin-bottom: 1rem; color: #2d3748;">Outras opções</h3>
-    <a href="{{ route('agendamento.cancelar.form') }}" class="btn btn-secondary">
+    <a href="{{ route('agendamento.cancelar.form', $empresa) }}" class="btn btn-secondary">
         Cancelar Agendamento
     </a>
 </div>

@@ -6,7 +6,7 @@
 
 @section('content')
 
-<form method="POST" action="{{ route('cliente.area') }}">
+<form method="POST" action="{{ route('cliente.area', $empresa) }}">
     @csrf
 
     <div class="form-group">

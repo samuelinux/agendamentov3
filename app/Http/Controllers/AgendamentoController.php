@@ -246,7 +246,9 @@ class AgendamentoController extends Controller
         }
 
         // Cliente não está logado, mostrar formulário de login
-        return view("cliente.login", 'empresa');
+        return view('cliente.login', [
+        'empresa' => $empresa,
+    ]);
     }
 
     /**
