@@ -273,6 +273,9 @@ class AgendamentoController extends Controller
         // Persistir o telefone do cliente na sessão para manter "logado"
         session(['cliente_telefone' => $telefoneLimpo]);
 
+        // LIMPA antes de preencher
+        $agendamentos = collect();
+
         // Buscar todos os agendamentos do cliente, ordenados por data
         $agendamentos = Agendamento::with(["empresa", "servico"])
             ->where("usuario_id", $cliente->id)
@@ -305,6 +308,7 @@ class AgendamentoController extends Controller
         // Buscar todos os agendamentos do cliente, ordenados por data
         $agendamentos = Agendamento::with(["empresa", "servico"])
             ->where("usuario_id", $cliente->id)
+            ->where('empresa_id', $empresa->id)
             ->orderBy("data_hora_inicio", "desc")
             ->get();
 
