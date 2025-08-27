@@ -276,6 +276,7 @@ class AgendamentoController extends Controller
         // Buscar todos os agendamentos do cliente, ordenados por data
         $agendamentos = Agendamento::with(["empresa", "servico"])
             ->where("usuario_id", $cliente->id)
+            ->where('empresa_id', $empresa->id)
             ->orderBy("data_hora_inicio", "desc")
             ->get();
 

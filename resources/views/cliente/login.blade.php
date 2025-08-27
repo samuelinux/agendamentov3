@@ -23,7 +23,7 @@
     </button>
 
     <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;">
-        <a href="{{ url('/') }}" class="btn btn-secondary">
+        <a href="{{ route('empresa', $empresa->slug) }}" class="btn btn-secondary">
             ← Voltar para início
         </a>
     </div>
