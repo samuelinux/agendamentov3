@@ -20,6 +20,7 @@ class Empresa extends Model
         'cep',
         'tamanho_slot_minutos',
         'antecedencia_minima_horas',
+        'limite_dias_agenda',
         'status'
     ];
 

@@ -33,22 +33,37 @@
 
             <h3 style="margin-bottom: 1rem; color: #2d3748;">Escolha um horário:</h3>
 
-            @foreach ($diasDisponiveis as $dia)
-                <div class="day-section">
-                    <div class="day-header">
-                        {{ $dia['dia_semana'] }}, {{ $dia['data_formatada'] }}
-                    </div>
+            <div id="diasAccordion" style="display: grid; gap: .75rem;">
+                @foreach ($diasDisponiveis as $i => $dia)
+                    <button type="button" class="dia-header" data-index="{{ $i }}"
+                        onclick="toggleDia({{ $i }})" aria-expanded="false"
+                        style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:.5rem; padding:.75rem 1rem; border:1px solid #e2e8f0; background:#fff; border-radius:8px; cursor:pointer;">
+                        <span style="font-weight:600; color:#2d3748;">
+                            {{ $dia['dia_semana'] }}
+                        </span>
+                        <span style="color:#4a5568;">
+                            {{ $dia['data_formatada'] }}
+                        </span>
+                        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            style="transition: transform .2s ease; color:#718096;">
+                            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
 
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        @foreach ($dia['horarios'] as $horario)
-                            <div class="time-slot" data-datetime="{{ $horario['data_hora_inicio'] }}"
-                                onclick="selecionarHorario(this)">
-                                {{ $horario['inicio'] }}
-                            </div>
-                        @endforeach
+                    <div id="slots-{{ $i }}" class="dia-slots" style="display:none; padding:.5rem 0 .25rem;">
+                        <div class="slots-grid" style="display:flex; flex-wrap:wrap; gap:.5rem;">
+                            @foreach ($dia['horarios'] as $horario)
+                                <div class="time-slot" data-datetime="{{ $horario['data_hora_inicio'] }}"
+                                    onclick="selecionarHorario(this)">
+                                    {{ $horario['inicio'] }}
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
+
 
             <div id="dadosCliente"
                 style="display: none; margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #e2e8f0;">
@@ -119,7 +134,39 @@
     <script>
         let horarioSelecionado = null;
         let telefoneLogado = "{{ $telefoneLogado }}";
+/**/
+let diaAberto = null;
 
+    function toggleDia(index) {
+        const atual = document.getElementById(`slots-${index}`);
+        const headerAtual = document.querySelector(`.dia-header[data-index="${index}"]`);
+        const abertoIndex = diaAberto;
+
+        // Fecha o dia anteriormente aberto
+        if (abertoIndex !== null && abertoIndex !== index) {
+            const anterior = document.getElementById(`slots-${abertoIndex}`);
+            const headerAnterior = document.querySelector(`.dia-header[data-index="${abertoIndex}"]`);
+            if (anterior) anterior.style.display = "none";
+            if (headerAnterior) headerAnterior.setAttribute("aria-expanded", "false");
+            const chevAnt = headerAnterior?.querySelector(".chevron");
+            if (chevAnt) chevAnt.style.transform = "rotate(0deg)";
+        }
+
+        // Alterna o atual
+        const isOpen = atual.style.display === "block";
+        if (isOpen) {
+            atual.style.display = "none";
+            headerAtual.setAttribute("aria-expanded", "false");
+            headerAtual.querySelector(".chevron").style.transform = "rotate(0deg)";
+            diaAberto = null;
+        } else {
+            atual.style.display = "block";
+            headerAtual.setAttribute("aria-expanded", "true");
+            headerAtual.querySelector(".chevron").style.transform = "rotate(180deg)";
+            diaAberto = index;
+            atual.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }
         function selecionarHorario(elemento) {
             // Remover seleção anterior
             document.querySelectorAll(".time-slot").forEach(slot => {

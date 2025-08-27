@@ -12,10 +12,10 @@ class DisponibilidadeService
     /**
      * Gera horários disponíveis para um serviço em uma data específica
      */
-    public function gerarHorariosDisponiveis(Empresa $empresa, Servico $servico, Carbon $data): Collection
+    public function gerarHorariosDisponiveis(Empresa $empresa, Servico $servico, Carbon $data, $quantidadeDeDias): Collection
     {
-        // 1. Validar se a data está dentro dos próximos 7 dias
-        if (!$this->validarDataDentroDoLimite($data)) {
+        // 1. Validar se a data está dentro dos próximos XXX dias
+        if (!$this->validarDataDentroDoLimite($data, $quantidadeDeDias)) {
             return collect();
         }
 
@@ -44,13 +44,14 @@ class DisponibilidadeService
     }
 
     /**
-     * Valida se a data está dentro dos próximos 7 dias
+     * Valida se a data está dentro dos próximos XXX dias
      */
-    private function validarDataDentroDoLimite(Carbon $data): bool
+    private function validarDataDentroDoLimite(Carbon $data, $quantidadeDeDias): bool
     {
+
         $hoje = Carbon::now()->startOfDay();
-        $limite = $hoje->copy()->addDays(7);
-        
+        $limite = $hoje->copy()->addDays($quantidadeDeDias);
+
         return $data->between($hoje, $limite);
     }
 
@@ -60,7 +61,7 @@ class DisponibilidadeService
     private function obterJornadasDoDia(Empresa $empresa, Carbon $data): Collection
     {
         $diaSemana = $data->dayOfWeek; // 0 = domingo, 1 = segunda, etc.
-        
+
         return $empresa->jornadasTrabalho()
             ->where('dia_semana', $diaSemana)
             ->orderBy('hora_inicio')
@@ -79,7 +80,7 @@ class DisponibilidadeService
             // Garantir que temos o formato correto de hora
             $horaInicio = $jornada->hora_inicio;
             $horaFim = $jornada->hora_fim;
-            
+
             // Se já está no formato HH:MM, usar diretamente, senão extrair
             if (strlen($horaInicio) > 5) {
                 $horaInicio = substr($horaInicio, 0, 5);
@@ -87,7 +88,7 @@ class DisponibilidadeService
             if (strlen($horaFim) > 5) {
                 $horaFim = substr($horaFim, 0, 5);
             }
-            
+
             try {
                 $inicio = Carbon::createFromFormat("Y-m-d H:i", $data->format("Y-m-d") . " " . $horaInicio);
                 $fim = Carbon::createFromFormat("Y-m-d H:i", $data->format("Y-m-d") . " " . $horaFim);
@@ -97,7 +98,7 @@ class DisponibilidadeService
             }
 
             $slotAtual = $inicio->copy();
-            
+
             // Se a data for hoje, ajustar o início do slot para a hora atual ou próximo slot
             if ($data->isToday()) {
                 $agora = Carbon::now();
@@ -151,7 +152,7 @@ class DisponibilidadeService
                 // Saidinha bloqueia apenas o período específico
                 $inicioSaidinha = Carbon::parse($excecao->data_inicio . " " . $excecao->hora_inicio);
                 $fimSaidinha = Carbon::parse($excecao->data_inicio . " " . $excecao->hora_fim);
-                
+
                 $slots = $slots->filter(function ($slot) use ($inicioSaidinha, $fimSaidinha) {
                     return !$slot->between($inicioSaidinha, $fimSaidinha);
                 });
@@ -191,17 +192,17 @@ class DisponibilidadeService
         $duracaoServico = $servico->duracao_minutos;
         $tamanhoSlot = $empresa->tamanho_slot_minutos;
         $slotsNecessarios = ceil($duracaoServico / $tamanhoSlot);
-        
+
         $horariosDisponiveis = collect();
         $slotsOrdenados = $slots->sort();
 
         foreach ($slotsOrdenados as $index => $slot) {
             $slotsConsecutivos = collect([$slot]);
-            
+
             // Verificar se há slots consecutivos suficientes
             for ($i = 1; $i < $slotsNecessarios; $i++) {
                 $proximoSlot = $slot->copy()->addMinutes($tamanhoSlot * $i);
-                
+
                 if ($slotsOrdenados->contains($proximoSlot)) {
                     $slotsConsecutivos->push($proximoSlot);
                 } else {
@@ -242,28 +243,34 @@ class DisponibilidadeService
     }
 
     /**
-     * Obtém os próximos 7 dias com horários disponíveis
+     * Obtém os próximos XXX dias com horários disponíveis
      */
-    public function obterProximosDiasDisponiveis(Empresa $empresa, Servico $servico): Collection
-    {
-        $diasDisponiveis = collect();
-        $hoje = Carbon::now()->startOfDay();
+    public function obterProximosDiasDisponiveis(Empresa $empresa, Servico $servico, $quantidadeDeDias): Collection
+{
+    $diasDisponiveis = collect();
+    $hoje = Carbon::now()->locale('pt_BR')->startOfDay();
 
-        for ($i = 0; $i < 7; $i++) {
-            $data = $hoje->copy()->addDays($i);
-            $horarios = $this->gerarHorariosDisponiveis($empresa, $servico, $data);
-            
-            if ($horarios->isNotEmpty()) {
-                $diasDisponiveis->push([
-                    'data' => $data->format('Y-m-d'),
-                    'data_formatada' => $data->format('d/m/Y'),
-                    'dia_semana' => $data->dayName,
-                    'horarios' => $horarios->values()
-                ]);
-            }
+
+    for ($i = 0; $i < $quantidadeDeDias; $i++) {
+        $data = $hoje->copy()->addDays($i); // já com locale pt_BR
+        $horarios = $this->gerarHorariosDisponiveis($empresa, $servico, $data, $quantidadeDeDias);
+
+        if ($horarios->isNotEmpty()) {
+            $dia = $data->isoFormat('dddd'); // "segunda-feira"
+            // Capitaliza só a primeira letra: "Segunda-feira"
+            $diaCapitalizado = mb_strtoupper(mb_substr($dia, 0, 1, 'UTF-8'), 'UTF-8')
+                             . mb_substr($dia, 1, null, 'UTF-8');
+
+            $diasDisponiveis->push([
+                'data'           => $data->format('Y-m-d'),
+                'data_formatada' => $data->format('d/m/Y'),
+                'dia_semana'     => $diaCapitalizado,
+                'horarios'       => $horarios->values(),
+            ]);
         }
-
-        return $diasDisponiveis;
     }
+
+    return $diasDisponiveis;
+}
 }
 

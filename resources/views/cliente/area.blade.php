@@ -35,6 +35,7 @@
             @php
                 $dataAgendamento = \Carbon\Carbon::parse($agendamento->data_hora_inicio)->locale('pt_BR');
                 $agora = \Carbon\Carbon::now();
+                //dd($agora)->all();
                 $diaSemana = $dataAgendamento->isoFormat('dddd');
                 $diaSemanaCap = mb_convert_case($diaSemana, MB_CASE_TITLE, 'UTF-8');
                 $podeSerCancelado = $dataAgendamento->isFuture() && $agendamento->status === 'confirmado';

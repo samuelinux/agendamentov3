@@ -336,6 +336,7 @@
                     <li><a href="{{ route("admin.servicos.index") }}" class="{{ request()->routeIs("admin.servicos.*") ? "active" : "" }}">Serviços</a></li>
                     <li><a href="{{ route("admin.relatorios.atendimentos") }}" class="{{ request()->routeIs("admin.relatorios.*") ? "active" : "" }}">Relatórios</a></li>
                     <li><a href="{{ route("admin.wpp.config.form") }}" class="{{ request()->routeIs("admin.wpp.*") ? "active" : "" }}">WhatsApp</a></li>
+                    <li><a href="{{ route("admin.working_hours.form") }}" class="{{ request()->routeIs("admin.working_hours.*") ? "active" : "" }}">Horas</a></li>
                 </ul>
             @endif
         @endauth
@@ -357,6 +358,7 @@
                     <li><a href="{{ route("admin.servicos.index") }}" class="{{ request()->routeIs("admin.servicos.*") ? "active" : "" }}">Serviços</a></li>
                     <li><a href="{{ route("admin.relatorios.atendimentos") }}" class="{{ request()->routeIs("admin.relatorios.*") ? "active" : "" }}">Relatórios</a></li>
                     <li><a href="{{ route("admin.wpp.config.form") }}" class="{{ request()->routeIs("admin.wpp.*") ? "active" : "" }}">WhatsApp</a></li>
+                    <li><a href="{{ route("admin.working_hours.form") }}" class="{{ request()->routeIs("admin.working_hours.*") ? "active" : "" }}">Horas</a></li>
                 </ul>
             </nav>
         @endif

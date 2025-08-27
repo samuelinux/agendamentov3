@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->integer('tamanho_slot_minutos')->default(15);
             $table->integer('antecedencia_minima_horas')->default(1);
+            $table->integer('limite_dias_agenda')->default(1);
             $table->boolean('ativo')->default(true);
             $table->timestamps();
         });

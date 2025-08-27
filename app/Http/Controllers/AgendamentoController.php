@@ -19,6 +19,7 @@ class AgendamentoController extends Controller
     public function __construct(DisponibilidadeService $disponibilidadeService)
     {
         $this->disponibilidadeService = $disponibilidadeService;
+
     }
 
     /**
@@ -37,7 +38,8 @@ class AgendamentoController extends Controller
                 ->with("error", "Este serviço não está disponível no momento.");
         }
 
-        $diasDisponiveis = $this->disponibilidadeService->obterProximosDiasDisponiveis($empresa, $servico);
+        $quantidadeDeDias = (int) ($empresa->limite_dias_agenda ?? 1);
+        $diasDisponiveis = $this->disponibilidadeService->obterProximosDiasDisponiveis($empresa, $servico, $quantidadeDeDias);
 
         $telefoneLogado = session('cliente_telefone');
         return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis", "telefoneLogado", 'empresa'));
@@ -78,12 +80,13 @@ class AgendamentoController extends Controller
         }
 
         $dataHoraFim = $dataHoraInicio->copy()->addMinutes($servico->duracao_minutos);
-
+        $quantidadeDeDias = (int) ($empresa->limite_dias_agenda ?? 1);
         // Verificar se o horário ainda está disponível
         $horariosDisponiveis = $this->disponibilidadeService->gerarHorariosDisponiveis(
             $empresa,
             $servico,
-            $dataHoraInicio
+            $dataHoraInicio,
+            $quantidadeDeDias
         );
 
         $horarioDisponivel = $horariosDisponiveis->first(function ($horario) use ($request) {
