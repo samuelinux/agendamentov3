@@ -6,142 +6,161 @@
 @section('content')
 <div class="card">
     <h2>Definir Carga Horária Semanal</h2>
-    <p>Configure os horários de funcionamento da sua empresa para cada dia da semana.</p>
-    
+    <p>Configure um ou vários turnos por dia.</p>
+
     @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    
+
     <form method="POST" action="{{ route('admin.working_hours.save') }}">
         @csrf
-        
+
         <div class="working-hours-container">
             @foreach($diasSemana as $diaSemana => $nomeDia)
-                <div class="day-row" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; border: 1px solid #ddd; border-radius: 5px;">
-                    <div class="day-name" style="width: 150px; font-weight: bold;">
-                        {{ $nomeDia }}
-                    </div>
-                    
-                    <div class="time-inputs" style="display: flex; gap: 1rem; align-items: center;">
-                        <div>
-                            <label for="hora_inicio_{{ $diaSemana }}" style="display: block; font-size: 0.9rem; margin-bottom: 0.25rem;">Hora Início:</label>
-                            <input 
-                                type="time" 
-                                id="hora_inicio_{{ $diaSemana }}" 
-                                name="jornadas[{{ $diaSemana }}][hora_inicio]" 
-                                value="{{ $jornadas->get($diaSemana)?->hora_inicio ?? '' }}"
-                                class="form-control"
-                                style="width: 120px;"
-                            >
+                @php
+                    // Fonte de verdade para renderização:
+                    // 1) old() pós-validação; 2) jornadasPorDia vindas do controller; 3) 1 turno vazio
+                    $oldTurnos = old("jornadas.$diaSemana", null);
+                    // $jornadasPorDia deve ser Collection<Grouped> pelo controller (groupBy)
+                    $turnosExistentes = isset($jornadasPorDia) && $jornadasPorDia->has($diaSemana)
+                        ? $jornadasPorDia[$diaSemana]->map(fn($j) => [
+                            'hora_inicio' => \Illuminate\Support\Str::of($j->hora_inicio)->substr(0,5),
+                            'hora_fim'    => \Illuminate\Support\Str::of($j->hora_fim)->substr(0,5),
+                            'dia_semana'  => $j->dia_semana,
+                        ])->values()->toArray()
+                        : [];
+
+                    $turnos = is_array($oldTurnos) ? $oldTurnos
+                            : (!empty($turnosExistentes) ? $turnosExistentes : [['hora_inicio'=>'','hora_fim'=>'','dia_semana'=>$diaSemana]]);
+                @endphp
+
+                <div class="day-block" data-dia="{{ $diaSemana }}"
+                     style="margin-bottom:1rem;padding:1rem;border:1px solid #ddd;border-radius:8px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem;">
+                        <div style="font-weight:bold;font-size:1.05rem;">
+                            {{ $nomeDia }}
                         </div>
-                        
-                        <div>
-                            <label for="hora_fim_{{ $diaSemana }}" style="display: block; font-size: 0.9rem; margin-bottom: 0.25rem;">Hora Fim:</label>
-                            <input 
-                                type="time" 
-                                id="hora_fim_{{ $diaSemana }}" 
-                                name="jornadas[{{ $diaSemana }}][hora_fim]" 
-                                value="{{ $jornadas->get($diaSemana)?->hora_fim ?? '' }}"
-                                class="form-control"
-                                style="width: 120px;"
-                            >
-                        </div>
-                        
-                        <input type="hidden" name="jornadas[{{ $diaSemana }}][dia_semana]" value="{{ $diaSemana }}">
-                        
-                        <div style="margin-left: 1rem;">
-                            <button type="button" class="btn btn-sm btn-secondary" onclick="clearDay({{ $diaSemana }})">
-                                Limpar
-                            </button>
+                        <div style="display:flex;gap:.5rem;">
+                            <button type="button" class="btn btn-sm btn-secondary" onclick="clearDay({{ $diaSemana }})">Limpar dia</button>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="addTurno({{ $diaSemana }})">+ Adicionar turno</button>
                         </div>
                     </div>
+
+                    <div class="turnos" id="turnos-{{ $diaSemana }}">
+                        @foreach($turnos as $idx => $turno)
+                            <div class="turno-row"
+                                 style="display:flex;gap:1rem;align-items:flex-end;margin-bottom:.75rem;border:1px dashed #ccc;padding:.75rem;border-radius:6px;">
+                                <div>
+                                    <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Início</label>
+                                    <input type="time"
+                                           name="jornadas[{{ $diaSemana }}][{{ $idx }}][hora_inicio]"
+                                           value="{{ \Illuminate\Support\Str::of($turno['hora_inicio'] ?? '')->substr(0,5) }}"
+                                           class="form-control" style="width:130px;">
+                                    @error("jornadas.$diaSemana.$idx.hora_inicio")
+                                        <div class="text-danger" style="font-size:.85rem;margin-top:.25rem;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Fim</label>
+                                    <input type="time"
+                                           name="jornadas[{{ $diaSemana }}][{{ $idx }}][hora_fim]"
+                                           value="{{ \Illuminate\Support\Str::of($turno['hora_fim'] ?? '')->substr(0,5) }}"
+                                           class="form-control" style="width:130px;">
+                                    @error("jornadas.$diaSemana.$idx.hora_fim")
+                                        <div class="text-danger" style="font-size:.85rem;margin-top:.25rem;">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <input type="hidden"
+                                       name="jornadas[{{ $diaSemana }}][{{ $idx }}][dia_semana]"
+                                       value="{{ $diaSemana }}">
+
+                                <button type="button" class="btn btn-outline-danger btn-sm"
+                                        onclick="removeTurno(this)">Remover</button>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Erros "genéricos" do dia (caso você valide sobreposição, etc) --}}
+                    @error("jornadas.$diaSemana")
+                        <div class="text-danger" style="font-size:.9rem;">{{ $message }}</div>
+                    @enderror
+
+                    {{-- Template invisível para novos turnos desse dia --}}
+                    <template id="tpl-turno-{{ $diaSemana }}">
+                        <div class="turno-row"
+                             style="display:flex;gap:1rem;align-items:flex-end;margin-bottom:.75rem;border:1px dashed #ccc;padding:.75rem;border-radius:6px;">
+                            <div>
+                                <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Início</label>
+                                <input type="time" class="form-control" style="width:130px;">
+                            </div>
+                            <div>
+                                <label style="display:block;font-size:.9rem;margin-bottom:.25rem;">Fim</label>
+                                <input type="time" class="form-control" style="width:130px;">
+                            </div>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeTurno(this)">Remover</button>
+                        </div>
+                    </template>
                 </div>
-                
-                @error("jornadas.{$diaSemana}.hora_inicio")
-                    <div class="text-danger" style="font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
-                @enderror
-                @error("jornadas.{$diaSemana}.hora_fim")
-                    <div class="text-danger" style="font-size: 0.875rem; margin-top: 0.25rem;">{{ $message }}</div>
-                @enderror
             @endforeach
         </div>
-        
-        <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-            <button type="submit" class="btn btn-primary">
-                Salvar Carga Horária
-            </button>
-            
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-                Voltar ao Dashboard
-            </a>
+
+        <div style="margin-top:1.25rem;display:flex;gap:1rem;">
+            <button type="submit" class="btn btn-primary">Salvar Carga Horária</button>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Voltar ao Dashboard</a>
         </div>
     </form>
 </div>
 
-<div class="card" style="margin-top: 2rem;">
+<div class="card" style="margin-top:2rem;">
     <h3>Instruções</h3>
-    <ul style="margin-left: 2rem;">
-        <li>Para cada dia da semana, defina a hora de início e fim do funcionamento.</li>
-        <li>Deixe os campos vazios para dias em que a empresa não funciona.</li>
-        <li>Use o botão "Limpar" para remover os horários de um dia específico.</li>
-        <li>A hora de fim deve ser posterior à hora de início.</li>
+    <ul style="margin-left:2rem;">
+        <li>Adicione quantos turnos quiser por dia.</li>
+        <li>Deixe o dia sem turnos para indicar que não há atendimento.</li>
+        <li>Evite sobreposição de turnos no mesmo dia.</li>
+        <li>A hora de fim deve ser posterior à de início.</li>
     </ul>
 </div>
 
 <script>
-function clearDay(diaSemana) {
-    document.getElementById('hora_inicio_' + diaSemana).value = '';
-    document.getElementById('hora_fim_' + diaSemana).value = '';
+function nextIndexForDay(dia) {
+    const cont = document.getElementById('turnos-' + dia);
+    const rows = cont.querySelectorAll('.turno-row');
+    return rows.length; // usa length como próximo índice
 }
 
-// Validação no frontend
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    
-    form.addEventListener('submit', function(e) {
-        let hasError = false;
-        
-        // Limpar mensagens de erro anteriores
-        document.querySelectorAll('.error-message').forEach(el => el.remove());
-        
-        // Validar cada dia
-        @foreach($diasSemana as $diaSemana => $nomeDia)
-            const horaInicio{{ $diaSemana }} = document.getElementById('hora_inicio_{{ $diaSemana }}');
-            const horaFim{{ $diaSemana }} = document.getElementById('hora_fim_{{ $diaSemana }}');
-            
-            if (horaInicio{{ $diaSemana }}.value && horaFim{{ $diaSemana }}.value) {
-                if (horaInicio{{ $diaSemana }}.value >= horaFim{{ $diaSemana }}.value) {
-                    showError(horaFim{{ $diaSemana }}, 'A hora de fim deve ser posterior à hora de início.');
-                    hasError = true;
-                }
-            } else if (horaInicio{{ $diaSemana }}.value || horaFim{{ $diaSemana }}.value) {
-                if (!horaInicio{{ $diaSemana }}.value) {
-                    showError(horaInicio{{ $diaSemana }}, 'Informe a hora de início.');
-                    hasError = true;
-                }
-                if (!horaFim{{ $diaSemana }}.value) {
-                    showError(horaFim{{ $diaSemana }}, 'Informe a hora de fim.');
-                    hasError = true;
-                }
-            }
-        @endforeach
-        
-        if (hasError) {
-            e.preventDefault();
-        }
-    });
-    
-    function showError(element, message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message text-danger';
-        errorDiv.style.fontSize = '0.875rem';
-        errorDiv.style.marginTop = '0.25rem';
-        errorDiv.textContent = message;
-        element.parentNode.appendChild(errorDiv);
-    }
-});
+function addTurno(dia) {
+    const tpl = document.getElementById('tpl-turno-' + dia);
+    const clone = tpl.content.cloneNode(true);
+    const idx = nextIndexForDay(dia);
+
+    const inputs = clone.querySelectorAll('input[type="time"]');
+    const inicio = inputs[0];
+    const fim    = inputs[1];
+
+    inicio.name = `jornadas[${dia}][${idx}][hora_inicio]`;
+    fim.name    = `jornadas[${dia}][${idx}][hora_fim]`;
+
+    // hidden dia_semana
+    const hidden = document.createElement('input');
+    hidden.type  = 'hidden';
+    hidden.name  = `jornadas[${dia}][${idx}][dia_semana]`;
+    hidden.value = dia;
+    clone.firstElementChild.appendChild(hidden);
+
+    document.getElementById('turnos-' + dia).appendChild(clone);
+}
+
+function removeTurno(btn) {
+    const row = btn.closest('.turno-row');
+    row?.remove();
+}
+
+function clearDay(dia) {
+    const cont = document.getElementById('turnos-' + dia);
+    cont.innerHTML = '';
+    addTurno(dia); // deixa um turno vazio por padrão
+}
 </script>
 @endsection
-
