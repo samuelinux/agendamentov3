@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +73,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             width: 100%;
-            margin-bottom: 0.5rem;
+
         }
 
         .btn-primary {
@@ -152,7 +153,7 @@
             background: #f7fafc;
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 0.5rem;
             margin-bottom: 1rem;
             transition: all 0.2s ease;
         }
@@ -318,12 +319,39 @@
                 padding: 0.5rem;
             }
 
-            .header, .main-content {
+            .header,
+            .main-content {
                 padding: 1rem;
             }
         }
     </style>
+    <!-- Coloque no <head> -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        /* Recomendado pelo Google para controlar a fonte variável */
+        .material-symbols-outlined,
+        .material-symbols-rounded,
+        .material-symbols-sharp {
+            font-variation-settings:
+                'FILL' 0,
+                /* 0 = contorno, 1 = preenchido */
+                'wght' 400,
+                /* peso 100..700 */
+                'GRAD' 0,
+                /* gradiente -50..200 */
+                'opsz' 24;
+            /* optical size 20..48 */
+        }
+    </style>
+
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -334,22 +362,22 @@
         </div>
 
         <div class="main-content">
-            @if(session('success'))
+            @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 <div class="alert alert-error">
                     {{ session('error') }}
                 </div>
             @endif
 
-            @if($errors->any())
+            @if ($errors->any())
                 <div class="alert alert-error">
                     <ul style="margin: 0; padding-left: 1.5rem;">
-                        @foreach($errors->all() as $error)
+                        @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
@@ -367,5 +395,5 @@
     @yield('fab')
     @yield('scripts')
 </body>
-</html>
 
+</html>

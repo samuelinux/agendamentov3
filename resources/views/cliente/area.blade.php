@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('title', 'Meus Agendamentos')
-@section('header', 'Meus Agendamentos')
+@section('header', $empresa->nome)
 @section('subtitle', 'Gerencie seus agendamentos')
 
 @section('content')
@@ -32,21 +32,31 @@
         </div>
 
         @foreach ($agendamentos as $agendamento)
+            @php
+                $dataAgendamento = \Carbon\Carbon::parse($agendamento->data_hora_inicio)->locale('pt_BR');
+                $agora = \Carbon\Carbon::now();
+                $diaSemana = $dataAgendamento->isoFormat('dddd');
+                $diaSemanaCap = mb_convert_case($diaSemana, MB_CASE_TITLE, 'UTF-8');
+                $podeSerCancelado = $dataAgendamento->isFuture() && $agendamento->status === 'confirmado';
+                $jaPassou = $dataAgendamento->isPast();
+            @endphp
+
             <div class="service-card" style="margin-bottom: 0.2rem;">
-                <div style="display: flex; justify-content: between; align-items: flex-start; margin-bottom: 0.2rem;">
+                <div style="display: flex; justify-content: between; align-items: flex-start;">
                     <div style="flex: 1;">
-                        <div class="service-name">{{ $agendamento->empresa->nome }}</div>
+                        <div class="service-name">
+                            <div class="material-symbols-outlined">
+                                calendar_month
+                            </div> {{ $dataAgendamento->format('d/m/Y') }}
+                        </div>
                         <div style="color: #718096; font-size: 0.9rem; margin-bottom: 0.2rem;">
-                            {{ $agendamento->servico->nome }}
+                            <div class="material-symbols-outlined">
+                                info
+                            </div> {{ $agendamento->servico->nome }}
                         </div>
                     </div>
 
-                    @php
-                        $dataAgendamento = \Carbon\Carbon::parse($agendamento->data_hora_inicio);
-                        $agora = \Carbon\Carbon::now();
-                        $podeSerCancelado = $dataAgendamento->isFuture() && $agendamento->status === 'confirmado';
-                        $jaPassou = $dataAgendamento->isPast();
-                    @endphp
+
 
                     <div style="text-align: right;">
                         @if ($agendamento->status === 'confirmado')
@@ -73,16 +83,13 @@
                 <div style="background: #f7fafc; border-radius: 8px; padding: 0.2rem; margin-bottom: 0.2rem;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem; font-size: 0.9rem;">
                         <div>
-                            <strong>Data:</strong><br>
-                            {{ $dataAgendamento->format('d/m/Y') }}
-                        </div>
-                        <div>
-                            <strong>Horário:</strong><br>
-                            {{ $dataAgendamento->format('H:i') }}
-                        </div>
-                        <div>
-                            <strong>Duração:</strong><br>
-                            {{ $agendamento->servico->duracao_minutos }} minutos
+                            <div class="material-symbols-outlined">
+                                calendar_month
+                            </div>
+                            {{ $diaSemanaCap }}, às {{ $dataAgendamento->format('H:i') }}h </br>
+                            <div class="material-symbols-outlined">
+                                pace
+                            </div>{{ $agendamento->servico->duracao_minutos }} minutos
                         </div>
                         <div>
                             <strong>Status:</strong><br>
@@ -100,7 +107,7 @@
                 </div>
 
                 @if ($podeSerCancelado)
-                    <form method="POST" action="{{route('agendamento.cancelar',) }}"
+                    <form method="POST" action="{{ route('agendamento.cancelar') }}"
                         onsubmit="return confirm('Tem certeza que deseja cancelar este agendamento?')"
                         style="margin-top: 0.2rem;">
                         @csrf
@@ -116,107 +123,107 @@
     @endif
 
     <!-- Botão flutuante "Fazer novo agendamento" -->
-    @section('fab')
+@section('fab')
     <div class="floating-button" id="fab">
         <a href="{{ route('empresa', $empresa->slug) }}" class="btn-floating">
             <span class="btn-floating-icon">+</span>
             <span class="btn-floating-text">Fazer novo agendamento</span>
         </a>
     </div>
-    @endsection
+@endsection
 
-    <style>
+<style>
+    .floating-button {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        width: calc(100% - 40%);
+    }
+
+    .btn-floating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 16px 24px;
+        background: linear-gradient(135deg, #38a169, #2f855a);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 500;
+        font-size: 16px;
+        box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-floating:hover {
+        background: linear-gradient(135deg, #2f855a, #276749);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(56, 161, 105, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .btn-floating:active {
+        transform: translateY(0);
+        box-shadow: 0 6px 20px rgba(56, 161, 105, 0.3);
+    }
+
+    .btn-floating-icon {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .btn-floating-text {
+        font-size: 16px;
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
         .floating-button {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            width: calc(100% - 40%);
+            bottom: 15px;
+            width: calc(100% - 30px);
         }
 
         .btn-floating {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 16px 24px;
-            background: linear-gradient(135deg, #38a169, #2f855a);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 500;
-            font-size: 16px;
-            box-shadow: 0 8px 25px rgba(56, 161, 105, 0.3);
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-floating:hover {
-            background: linear-gradient(135deg, #2f855a, #276749);
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(56, 161, 105, 0.4);
-            color: white;
-            text-decoration: none;
-        }
-
-        .btn-floating:active {
-            transform: translateY(0);
-            box-shadow: 0 6px 20px rgba(56, 161, 105, 0.3);
+            padding: 14px 20px;
+            font-size: 15px;
         }
 
         .btn-floating-icon {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 18px;
         }
 
         .btn-floating-text {
-            font-size: 16px;
+            font-size: 15px;
         }
+    }
 
-        /* Responsividade */
-        @media (max-width: 480px) {
-            .floating-button {
-                bottom: 15px;
-                width: calc(100% - 30px);
-            }
-
-            .btn-floating {
-                padding: 14px 20px;
-                font-size: 15px;
-            }
-
-            .btn-floating-icon {
-                font-size: 18px;
-            }
-
-            .btn-floating-text {
-                font-size: 15px;
-            }
-        }
-
-        /* Garantir espaço para o botão flutuante */
-        body {
-            padding-bottom: 100px;
-        }
-    </style>
+    /* Garantir espaço para o botão flutuante */
+    body {
+        padding-bottom: 100px;
+    }
+</style>
 
 @endsection
 
 @section('scripts')
-    <script>
-        // Máscara para telefone
-        document.getElementById('telefone_cliente')?.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-                if (value.length < 14) {
-                    value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
-                }
+<script>
+    // Máscara para telefone
+    document.getElementById('telefone_cliente')?.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            if (value.length < 14) {
+                value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
             }
-            e.target.value = value;
-        });
-    </script>
+        }
+        e.target.value = value;
+    });
+</script>
 @endsection
