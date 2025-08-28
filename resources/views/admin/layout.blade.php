@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,7 +135,7 @@
         .card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 2rem;
             margin-bottom: 2rem;
         }
@@ -307,12 +308,13 @@
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
         <h1>@yield('header', 'Painel Administrativo')</h1>
         <div class="user-info">
-            <span>{{ auth()->user()->nome }}</span>
+            
             <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
                 @csrf
                 <button type="submit" class="btn btn-danger btn-sm">Sair</button>
@@ -324,63 +326,75 @@
     <div class="sidebar-overlay" onclick="closeSidebar()"></div>
     <div class="sidebar" id="sidebar">
         @auth
-            @if(auth()->user()->empresa_id === null)
+            @if (auth()->user()->empresa_id === null)
                 {{-- Menu para Super Admin --}}
                 <ul>
-                    <li><a href="{{ route('admin.empresas.index') }}" class="{{ request()->routeIs('admin.empresas.*') ? 'active' : '' }}">Empresas</a></li>
+                    <li><a href="{{ route('admin.empresas.index') }}"
+                            class="{{ request()->routeIs('admin.empresas.*') ? 'active' : '' }}">Empresas</a></li>
                 </ul>
             @else
                 {{-- Menu para Admin da Empresa --}}
                 <ul>
-                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-                    <li><a href="{{ route("admin.servicos.index") }}" class="{{ request()->routeIs("admin.servicos.*") ? "active" : "" }}">Serviços</a></li>
-                    <li><a href="{{ route("admin.relatorios.atendimentos") }}" class="{{ request()->routeIs("admin.relatorios.*") ? "active" : "" }}">Relatórios</a></li>
-                    <li><a href="{{ route("admin.wpp.config.form") }}" class="{{ request()->routeIs("admin.wpp.*") ? "active" : "" }}">WhatsApp</a></li>
-                    <li><a href="{{ route("admin.working_hours.form") }}" class="{{ request()->routeIs("admin.working_hours.*") ? "active" : "" }}">Horas</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.servicos.index') }}"
+                            class="{{ request()->routeIs('admin.servicos.*') ? 'active' : '' }}">Serviços</a></li>
+                    <li><a href="{{ route('admin.relatorios.atendimentos') }}"
+                            class="{{ request()->routeIs('admin.relatorios.*') ? 'active' : '' }}">Relatórios</a></li>
+                    <li><a href="{{ route('admin.wpp.config.form') }}"
+                            class="{{ request()->routeIs('admin.wpp.*') ? 'active' : '' }}">WhatsApp</a></li>
+                    <li><a href="{{ route('admin.working_hours.form') }}"
+                            class="{{ request()->routeIs('admin.working_hours.*') ? 'active' : '' }}">Horas</a></li>
                 </ul>
             @endif
         @endauth
     </div>
 
     @auth
-        @if(auth()->user()->empresa_id === null)
+        @if (auth()->user()->empresa_id === null)
             {{-- Menu para Super Admin --}}
             <nav class="nav">
                 <ul>
-                    <li><a href="{{ route('admin.empresas.index') }}" class="{{ request()->routeIs('admin.empresas.*') ? 'active' : '' }}">Empresas</a></li>
+                    <li><a href="{{ route('admin.empresas.index') }}"
+                            class="{{ request()->routeIs('admin.empresas.*') ? 'active' : '' }}">Empresas</a></li>
                 </ul>
             </nav>
         @else
             {{-- Menu para Admin da Empresa --}}
             <nav class="nav">
                 <ul>
-                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
-                    <li><a href="{{ route("admin.servicos.index") }}" class="{{ request()->routeIs("admin.servicos.*") ? "active" : "" }}">Serviços</a></li>
-                    <li><a href="{{ route("admin.relatorios.atendimentos") }}" class="{{ request()->routeIs("admin.relatorios.*") ? "active" : "" }}">Relatórios</a></li>
-                    <li><a href="{{ route("admin.wpp.config.form") }}" class="{{ request()->routeIs("admin.wpp.*") ? "active" : "" }}">WhatsApp</a></li>
-                    <li><a href="{{ route("admin.working_hours.form") }}" class="{{ request()->routeIs("admin.working_hours.*") ? "active" : "" }}">Horas</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}"
+                            class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.servicos.index') }}"
+                            class="{{ request()->routeIs('admin.servicos.*') ? 'active' : '' }}">Serviços</a></li>
+                    <li><a href="{{ route('admin.relatorios.atendimentos') }}"
+                            class="{{ request()->routeIs('admin.relatorios.*') ? 'active' : '' }}">Relatórios</a></li>
+                    <li><a href="{{ route('admin.wpp.config.form') }}"
+                            class="{{ request()->routeIs('admin.wpp.*') ? 'active' : '' }}">WhatsApp</a></li>
+                    <li><a href="{{ route('admin.working_hours.form') }}"
+                            class="{{ request()->routeIs('admin.working_hours.*') ? 'active' : '' }}">Horas</a></li>
                 </ul>
             </nav>
         @endif
     @endauth
 
     <div class="container">
-        @if(session('success'))
+        @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
-        @if(session('error'))
+        @if (session('error'))
             <div class="alert alert-error">
                 {{ session('error') }}
             </div>
         @endif
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="alert alert-error">
                 <ul style="margin: 0; padding-left: 1rem;">
-                    @foreach($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -413,4 +427,5 @@
         });
     </script>
 </body>
+
 </html>
