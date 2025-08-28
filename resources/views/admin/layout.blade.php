@@ -314,7 +314,7 @@
         <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
         <h1>@yield('header', 'Painel Administrativo')</h1>
         <div class="user-info">
-            
+
             <form action="{{ route('admin.logout') }}" method="POST" style="display: inline;">
                 @csrf
                 <button type="submit" class="btn btn-danger btn-sm">Sair</button>
@@ -339,6 +339,8 @@
                             class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="{{ route('admin.servicos.index') }}"
                             class="{{ request()->routeIs('admin.servicos.*') ? 'active' : '' }}">Serviços</a></li>
+                    <li><a href="{{ route('admin.empresa-config.edit') }}"
+                            class="{{ request()->routeIs('admin.empresa-config.*') ? 'active' : '' }}">Config</a></li>
                     <li><a href="{{ route('admin.relatorios.atendimentos') }}"
                             class="{{ request()->routeIs('admin.relatorios.*') ? 'active' : '' }}">Relatórios</a></li>
                     <li><a href="{{ route('admin.wpp.config.form') }}"
@@ -367,6 +369,8 @@
                             class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">Dashboard</a></li>
                     <li><a href="{{ route('admin.servicos.index') }}"
                             class="{{ request()->routeIs('admin.servicos.*') ? 'active' : '' }}">Serviços</a></li>
+                    <li><a href="{{ route('admin.empresa-config.edit') }}"
+                            class="{{ request()->routeIs('admin.empresa-config.*') ? 'active' : '' }}">Config</a></li>
                     <li><a href="{{ route('admin.relatorios.atendimentos') }}"
                             class="{{ request()->routeIs('admin.relatorios.*') ? 'active' : '' }}">Relatórios</a></li>
                     <li><a href="{{ route('admin.wpp.config.form') }}"
