@@ -81,26 +81,10 @@ class AuthController extends Controller
             ->orderBy("data_hora_inicio", "asc")
             ->paginate($perPage);
 
-        // Calcular valor ganho (agendamentos realizados)
-        $valorGanho = Agendamento::where("agendamentos.empresa_id", $empresa->id)
-            ->whereDate("data_hora_inicio", today())
-            ->where("status", "realizado") // Assumindo que \"realizado\" é o status para agendamentos concluídos
-            ->join("servicos", "agendamentos.servico_id", "=", "servicos.id")
-            ->sum("servicos.valor");
-
-        // Calcular valor futuro (agendamentos não cancelados)
-        $valorFuturo = Agendamento::where("agendamentos.empresa_id", $empresa->id)
-            ->whereDate("data_hora_inicio", today())
-            ->whereIn("status", ["agendado", "confirmado", "realizado"])
-            ->join("servicos", "agendamentos.servico_id", "=", "servicos.id")
-            ->sum("servicos.valor");
-
         return view("admin.dashboard", compact(
             "empresa",
-            "agendamentosDoDia",
-            "valorGanho",
-            "valorFuturo",
-            "perPage"
+            "perPage",
+            'agendamentosDoDia'
         ));
     }
 
