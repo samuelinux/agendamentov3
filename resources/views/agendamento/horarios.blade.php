@@ -95,7 +95,7 @@
                 @else
                     <div class="form-group">
                         <label for="telefone_cliente">Telefone (WhatsApp):</label>
-                        <input type="tel" id="telefone_cliente" name="telefone_cliente" class="form-control"
+                        <input type="tel" id="telefone_cliente" name="telefone_cliente" maxlength="15" class="form-control"
                             placeholder="(11) 99999-9999" required>
                     </div>
 

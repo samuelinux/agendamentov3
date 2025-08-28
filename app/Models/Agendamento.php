@@ -10,6 +10,21 @@ class Agendamento extends Model
 {
     use HasFactory;
 
+    // Status “de aplicação” (sem ENUM no banco)
+    public const STATUS_AGENDADO   = 'agendado';
+    public const STATUS_CONFIRMADO = 'confirmado';
+    public const STATUS_CANCELADO  = 'cancelado';
+    public const STATUS_REALIZADO  = 'realizado';
+    public const STATUS_PAGO       = 'pago';
+
+    public const STATUS_PERMITIDOS = [
+        self::STATUS_AGENDADO,
+        self::STATUS_CONFIRMADO,
+        self::STATUS_CANCELADO,
+        self::STATUS_REALIZADO,
+        self::STATUS_PAGO,
+    ];
+
     protected $fillable = [
         'empresa_id',
         'usuario_id',
@@ -17,12 +32,15 @@ class Agendamento extends Model
         'data_hora_inicio',
         'data_hora_fim',
         'status',
-        'observacoes'
+        'observacoes',
+        'valor_pago', // novo
     ];
 
     protected $casts = [
         'data_hora_inicio' => 'datetime',
-        'data_hora_fim' => 'datetime',
+        'data_hora_fim'    => 'datetime',
+        'valor_pago'       => 'decimal:2', // novo
+        'status'           => 'string',
     ];
 
     // Relacionamentos
@@ -75,4 +93,23 @@ class Agendamento extends Model
             ->confirmados()
             ->get();
     }
+
+    public function getStatusAttribute($value)
+{
+    return strtolower(trim((string) $value));
+}
+
+public function getStatusBadgeAttribute(): string
+{
+    return match ($this->status) {
+        self::STATUS_PAGO       => '<span class="badge badge-primary">Pago</span>',
+        self::STATUS_REALIZADO  => '<span class="badge badge-success">Realizado</span>',
+        self::STATUS_CANCELADO  => '<span class="badge badge-danger">Cancelado</span>',
+        self::STATUS_CONFIRMADO => '<span class="badge badge-info">Confirmado</span>',
+        self::STATUS_AGENDADO   => '<span class="badge badge-warning">Agendado</span>',
+        default                 => '<span class="badge badge-secondary">'.ucfirst($this->status).'</span>',
+    };
+}
+
+
 }

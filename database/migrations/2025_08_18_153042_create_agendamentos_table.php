@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('servico_id')->constrained('servicos')->onDelete('cascade');
             $table->dateTime('data_hora_inicio');
             $table->dateTime('data_hora_fim');
-            $table->enum('status', ['confirmado', 'cancelado', 'realizado', 'agendado'])->default('confirmado');
+            $table->decimal('valor_pago', 10, 2)->nullable();
+            $table->string('status')->default('confirmado');
             $table->timestamps();
         });
     }

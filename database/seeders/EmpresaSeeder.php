@@ -17,7 +17,7 @@ class EmpresaSeeder extends Seeder
             'nome' => 'Barbearia do João',
             'slug' => 'barbearia-do-joao',
             'tamanho_slot_minutos' => 15,
-            'antecedencia_minima_horas' => 1,
+            'antecedencia_minima_horas' => 0,
             'ativo' => true
         ]);
 

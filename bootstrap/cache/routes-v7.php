@@ -63,7 +63,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::jwaui9CiSHZWkHYT',
+            '_route' => 'generated::fJw8nRjVrqgm7q3D',
           ),
           1 => NULL,
           2 => 
@@ -83,7 +83,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::QVicjvH5N743K2ma',
+            '_route' => 'generated::2Gu2qGfGzHhnr099',
           ),
           1 => NULL,
           2 => 
@@ -180,7 +180,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::MVAfLJwDIV0evimR',
+            '_route' => 'generated::XfJGSfI8NMhU3lwL',
           ),
           1 => NULL,
           2 => 
@@ -200,7 +200,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Q0GhyPvmpSPnXfma',
+            '_route' => 'generated::V46DnnYAl1vh0PaT',
           ),
           1 => NULL,
           2 => 
@@ -606,7 +606,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/livewire/preview\\-file/([^/]++)(*:39)|/([^/]++)/c(?|ancelar\\-agendamento(*:80)|liente(?|(*:96)|/(?|area(*:111)|logout(*:125))))|/admin/(?|empresas/([^/]++)(?|/(?|edit(*:174)|toggle\\-status(*:196))|(*:205))|servicos/([^/]++)(?|/(?|edit(*:242)|toggle\\-status(*:264))|(*:273)))|/([^/]++)(?|(*:295)|/([^/]++)/agendar(?|(*:323))))/?$}sDu',
+      0 => '{^(?|/livewire/preview\\-file/([^/]++)(*:39)|/([^/]++)/c(?|ancelar\\-agendamento(*:80)|liente(?|(*:96)|/(?|area(*:111)|logout(*:125))))|/admin/(?|empresas/([^/]++)(?|/(?|edit(*:174)|toggle\\-status(*:196))|(*:205))|servicos/([^/]++)(?|/(?|edit(*:242)|toggle\\-status(*:264))|(*:273))|agendamentos/([^/]++)/registrar\\-pagamento(*:324))|/([^/]++)(?|(*:345)|/([^/]++)/agendar(?|(*:373))))/?$}sDu',
     ),
     3 => 
     array (
@@ -898,7 +898,29 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      295 => 
+      324 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'admin.agendamentos.registrar-pagamento',
+          ),
+          1 => 
+          array (
+            0 => 'agendamento',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      345 => 
       array (
         0 => 
         array (
@@ -921,7 +943,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      323 => 
+      373 => 
       array (
         0 => 
         array (
@@ -1048,7 +1070,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::jwaui9CiSHZWkHYT' => 
+    'generated::fJw8nRjVrqgm7q3D' => 
     array (
       'methods' => 
       array (
@@ -1060,7 +1082,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@returnJavaScriptAsFile',
-        'as' => 'generated::jwaui9CiSHZWkHYT',
+        'as' => 'generated::fJw8nRjVrqgm7q3D',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1076,7 +1098,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::QVicjvH5N743K2ma' => 
+    'generated::2Gu2qGfGzHhnr099' => 
     array (
       'methods' => 
       array (
@@ -1088,7 +1110,7 @@ app('router')->setCompiledRoutes(
       array (
         'uses' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
         'controller' => 'Livewire\\Mechanisms\\FrontendAssets\\FrontendAssets@maps',
-        'as' => 'generated::QVicjvH5N743K2ma',
+        'as' => 'generated::2Gu2qGfGzHhnr099',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1268,7 +1290,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::MVAfLJwDIV0evimR' => 
+    'generated::XfJGSfI8NMhU3lwL' => 
     array (
       'methods' => 
       array (
@@ -1291,7 +1313,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::MVAfLJwDIV0evimR',
+        'as' => 'generated::XfJGSfI8NMhU3lwL',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1307,7 +1329,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Q0GhyPvmpSPnXfma' => 
+    'generated::V46DnnYAl1vh0PaT' => 
     array (
       'methods' => 
       array (
@@ -1327,7 +1349,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Q0GhyPvmpSPnXfma',
+        'as' => 'generated::V46DnnYAl1vh0PaT',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2485,6 +2507,43 @@ app('router')->setCompiledRoutes(
         'as' => 'admin.wpp.config.save',
         'namespace' => NULL,
         'prefix' => 'admin/wpp',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'admin.agendamentos.registrar-pagamento' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'admin/agendamentos/{agendamento}/registrar-pagamento',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\Admin\\AgendamentoPagamentoController@store',
+        'controller' => 'App\\Http\\Controllers\\Admin\\AgendamentoPagamentoController@store',
+        'as' => 'admin.agendamentos.registrar-pagamento',
+        'namespace' => NULL,
+        'prefix' => '/admin',
         'where' => 
         array (
         ),

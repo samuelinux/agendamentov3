@@ -22,7 +22,7 @@ class UsuarioSeeder extends Seeder
         Usuario::create([
             'empresa_id' => null,
             'nome' => 'Super Administrador',
-            'telefone' => '+5511999999999',
+            'telefone' => '11999999999',
             'email' => 'admin@sistema.com',
             'password' => Hash::make('123456'),
             'tipo' => 'admin'
@@ -32,7 +32,7 @@ class UsuarioSeeder extends Seeder
         Usuario::create([
             'empresa_id' => $barbearia->id,
             'nome' => 'João Silva',
-            'telefone' => '+5511888888888',
+            'telefone' => '11888888888',
             'email' => 'joao@barbearia.com',
             'password' => Hash::make('123456'),
             'tipo' => 'admin'
@@ -42,7 +42,7 @@ class UsuarioSeeder extends Seeder
         Usuario::create([
             'empresa_id' => $salao->id,
             'nome' => 'Maria Santos',
-            'telefone' => '+5511777777777',
+            'telefone' => '11777777777',
             'email' => 'maria@salao.com',
             'password' => Hash::make('123456'),
             'tipo' => 'admin'
@@ -52,7 +52,7 @@ class UsuarioSeeder extends Seeder
         Usuario::create([
             'empresa_id' => null,
             'nome' => 'Carlos Oliveira',
-            'telefone' => '+5511666666666',
+            'telefone' => '11666666666',
             'email' => null,
             'password' => null,
             'tipo' => 'cliente'
@@ -61,7 +61,7 @@ class UsuarioSeeder extends Seeder
         Usuario::create([
             'empresa_id' => null,
             'nome' => 'Ana Costa',
-            'telefone' => '+5511555555555',
+            'telefone' => '11555555555',
             'email' => null,
             'password' => null,
             'tipo' => 'cliente'

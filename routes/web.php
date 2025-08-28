@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\EmpresaController;
 use App\Http\Controllers\Admin\EmpresaConfigController;
 use App\Http\Controllers\Admin\ServicoController;
 use App\Http\Controllers\Admin\RelatorioController;
+use App\Http\Controllers\Admin\AgendamentoPagamentoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "showForm"])->name("config.form");
             Route::post("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "save"])->name("config.save");
         });
+        Route::post('/agendamentos/{agendamento}/registrar-pagamento', [AgendamentoPagamentoController::class, 'store'])->name('agendamentos.registrar-pagamento');
+
     });
 });
 
