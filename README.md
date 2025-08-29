@@ -189,6 +189,11 @@ php artisan view:clear
 php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear
 ```
 
+### Faça backup das mudanças
+```bash
+git add . && git commit -m "Pequenas mudanças" && git push
+```
+
 ## 📝 Licença
 
 Este projeto foi desenvolvido como um sistema de agendamento completo e funcional. Todos os direitos reservados.
