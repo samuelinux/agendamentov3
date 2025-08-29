@@ -25,7 +25,7 @@ class AgendamentoPagamentoController extends Controller
         ]);
 
         $agendamento->valor_pago = $data['valor_pago'];
-        $agendamento->status = Agendamento::STATUS_PAGO; // "pago" (string)
+        $agendamento->status = "pago";
         $agendamento->save();
 
         return back()->with('success', 'Pagamento registrado com sucesso!');

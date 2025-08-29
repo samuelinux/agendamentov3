@@ -31,7 +31,7 @@
                             <th>Horário</th>
                             <th>Cliente</th>
                             <th>Serviço</th>
-                            <th>Valor</th>
+                            
                             <th>Valor Pago</th> {{-- novo --}}
                             <th>Status</th>
                         </tr>
@@ -57,21 +57,36 @@
                                 <td>{{ $hora }}</td>
                                 <td>{{ $agendamento->usuario->nome }}</td>
                                 <td>{{ $agendamento->servico->nome }}</td>
-                                <td>R$ {{ $valorServico }}</td>
+                                
                                 <td>{{ $valorPago }}</td>
                                 <td>
-                                    @if ($agendamento->status === 'pago')
-                                        <span class="badge badge-primary">Pago</span>
-                                    @elseif ($agendamento->status === 'confirmado')
-                                        <span class="badge badge-info">Confirmado</span>
-                                    @elseif ($agendamento->status === 'realizado')
-                                        <span class="badge badge-success">Realizado</span>
-                                    @elseif ($agendamento->status === 'cancelado')
-                                        <span class="badge badge-danger">Cancelado</span>
-                                    @else
-                                        <span class="badge badge-secondary">{{ ucfirst($agendamento->status) }}</span>
-                                    @endif
+
+                                    @switch($agendamento->status)
+                                        @case('agendado')
+                                            <span class="badge bg-primary">Agendado</span>
+                                        @break
+
+                                        @case('confirmado')
+                                            <span class="badge bg-info text-dark">Confirmado</span>
+                                        @break
+
+                                        @case('realizado')
+                                            <span class="badge bg-success">Realizado</span>
+                                        @break
+
+                                        @case('cancelado')
+                                            <span class="badge bg-danger">Cancelado</span>
+                                        @break
+
+                                        @case('pago')
+                                            <span class="badge bg-success">✓ Pago</span>
+                                        @break
+
+                                        @default
+                                            <span class="badge bg-secondary">Pendente</span>
+                                    @endswitch
                                 </td>
+
                             </tr> {{-- ✅ fechamento do <tr> --}}
                         @endforeach
                     </tbody>

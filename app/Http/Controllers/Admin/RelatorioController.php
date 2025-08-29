@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Agendamento;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class RelatorioController extends Controller
 {
@@ -49,32 +50,30 @@ class RelatorioController extends Controller
             ->paginate($perPage);
 
         // Calcular ganhos totais do período
-        $ganhosTotais = Agendamento::where('agendamentos.empresa_id', $empresa->id)
+        $ganhosTotais = Agendamento::where('empresa_id', $empresa->id)
             ->whereBetween('data_hora_inicio', [$dataInicioCarbon, $dataFimCarbon])
-            ->confirmados()
-            ->join('servicos', 'agendamentos.servico_id', '=', 'servicos.id')
-            ->sum('servicos.valor');
+            ->pagos() // scope que já filtra status = 'pago'
+            ->sum('valor_pago');
 
         // Agrupar agendamentos por data para exibição
-        $agendamentosPorData = $agendamentos->groupBy(function($agendamento) {
+        $agendamentosPorData = $agendamentos->groupBy(function ($agendamento) {
             return $agendamento->data_hora_inicio->format('Y-m-d');
         });
 
         // Calcular valor ganho (agendamentos realizados)
         $valorGanho = Agendamento::where("agendamentos.empresa_id", $empresa->id)
             ->whereDate("data_hora_inicio", today())
-            ->where("status", "realizado") // Assumindo que \"realizado\" é o status para agendamentos concluídos
-            ->join("servicos", "agendamentos.servico_id", "=", "servicos.id")
-            ->sum("servicos.valor");
+            ->where("status", "pago") // Assumindo que \"realizado\" é o status para agendamentos concluídos
+            ->sum("valor_pago");
 
-            // Calcular valor futuro (agendamentos não cancelados)
+        // Calcular valor futuro (agendamentos não cancelados)
         $valorFuturo = Agendamento::where("agendamentos.empresa_id", $empresa->id)
             ->whereDate("data_hora_inicio", today())
-            ->whereIn("status", ["agendado", "confirmado", "realizado"])
+            ->whereIn("status", ["agendado", "confirmado", "realizado", "pago"]) // Exclui apenas cancelados
             ->join("servicos", "agendamentos.servico_id", "=", "servicos.id")
-            ->sum("servicos.valor");
+            ->sum(DB::raw("servicos.valor + agendamentos.valor_pago"));
 
-            // Agendamentos do dia
+        // Agendamentos do dia
         $agendamentosDoDia = Agendamento::where("empresa_id", $empresa->id)
             ->whereDate("data_hora_inicio", today())
             ->with(["servico", "usuario"])
@@ -95,4 +94,3 @@ class RelatorioController extends Controller
         ));
     }
 }
-

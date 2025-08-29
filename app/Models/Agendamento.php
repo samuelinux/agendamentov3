@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 
 class Agendamento extends Model
 {
@@ -55,6 +54,11 @@ class Agendamento extends Model
         return $query->where('status', 'confirmado');
     }
 
+    public function scopePagos($query)
+    {
+        return $query->where('status', 'pago');
+    }
+
     public function scopeCancelados($query)
     {
         return $query->where('status', 'cancelado');
@@ -84,17 +88,6 @@ class Agendamento extends Model
     return strtolower(trim((string) $value));
 }
 
-public function getStatusBadgeAttribute(): string
-{
-    return match ($this->status) {
-        self::STATUS_PAGO       => '<span class="badge badge-primary">Pago</span>',
-        self::STATUS_REALIZADO  => '<span class="badge badge-success">Realizado</span>',
-        self::STATUS_CANCELADO  => '<span class="badge badge-danger">Cancelado</span>',
-        self::STATUS_CONFIRMADO => '<span class="badge badge-info">Confirmado</span>',
-        self::STATUS_AGENDADO   => '<span class="badge badge-warning">Agendado</span>',
-        default                 => '<span class="badge badge-secondary">'.ucfirst($this->status).'</span>',
-    };
-}
 
 
 }
