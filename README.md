@@ -165,6 +165,7 @@ As jornadas são configuráveis por dia da semana (0=Domingo, 1=Segunda, etc.) c
 
 ### Erro de Permissões
 ```bash
+sudo chown samuel:samuel .gitignore
 sudo chown samuel:samuel .env
 sudo chmod -R 775 storage bootstrap/cache
 sudo chown -R $USER:$USER storage bootstrap/cache
