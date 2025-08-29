@@ -196,6 +196,11 @@ eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
 echo 'eval "$(ssh-agent -s)" > /dev/null && ssh-add -q ~/.ssh/id_ed25519 2>/dev/null || true' | tee -a ~/.zshrc ~/.bashrc
 ```
 
+### Resetar mudanças Locais
+```bash
+git reset --hard origin/$(git rev-parse --abbrev-ref HEAD) && git clean -fd && git pull
+
+```
 
 ### Faça backup das mudanças
 ```bash
