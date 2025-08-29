@@ -192,12 +192,14 @@ php artisan config:clear && php artisan cache:clear && php artisan view:clear &&
 ### Parar de pedir senha ssh
 ```bash
 eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+echo 'eval "$(ssh-agent -s)" > /dev/null && ssh-add -q ~/.ssh/id_ed25519 2>/dev/null || true' | tee -a ~/.zshrc ~/.bashrc
 ```
 
 
 ### Faça backup das mudanças
 ```bash
 git add . && git commit -m "Pequenas mudanças" && git push
+
 ```
 
 ## 📝 Licença
