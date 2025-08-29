@@ -189,6 +189,12 @@ php artisan view:clear
 php artisan config:clear && php artisan cache:clear && php artisan view:clear && php artisan route:clear
 ```
 
+### Parar de pedir senha ssh
+```bash
+eval "$(ssh-agent -s)" && ssh-add ~/.ssh/id_ed25519
+```
+
+
 ### Faça backup das mudanças
 ```bash
 git add . && git commit -m "Pequenas mudanças" && git push
