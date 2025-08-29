@@ -176,6 +176,11 @@ sudo chmod -R 775 storage bootstrap/cache
 
 ```
 
+### Entrar em Container DOCKER
+```bash
+docker exec -it sistema_de_agendamento-app bash
+```
+
 ### Erro de Banco de Dados
 ```bash
 php artisan migrate:fresh --seed
