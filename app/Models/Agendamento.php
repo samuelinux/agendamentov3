@@ -10,21 +10,6 @@ class Agendamento extends Model
 {
     use HasFactory;
 
-    // Status “de aplicação” (sem ENUM no banco)
-    public const STATUS_AGENDADO   = 'agendado';
-    public const STATUS_CONFIRMADO = 'confirmado';
-    public const STATUS_CANCELADO  = 'cancelado';
-    public const STATUS_REALIZADO  = 'realizado';
-    public const STATUS_PAGO       = 'pago';
-
-    public const STATUS_PERMITIDOS = [
-        self::STATUS_AGENDADO,
-        self::STATUS_CONFIRMADO,
-        self::STATUS_CANCELADO,
-        self::STATUS_REALIZADO,
-        self::STATUS_PAGO,
-    ];
-
     protected $fillable = [
         'empresa_id',
         'usuario_id',
