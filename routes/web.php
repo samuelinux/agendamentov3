@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\EmpresaConfigController;
 use App\Http\Controllers\Admin\ServicoController;
 use App\Http\Controllers\Admin\RelatorioController;
 use App\Http\Controllers\Admin\AgendamentoPagamentoController;
+use App\Http\Controllers\Wpp\WhatsAppController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::prefix("webhook/whatsapp")->name("webhook.whatsapp.")->group(function () {
     Route::get("/", [\App\Http\Controllers\Wpp\WebhookController::class, "verify"])->name("verify");
     Route::post("/", [\App\Http\Controllers\Wpp\WebhookController::class, "handle"])->name("handle");
+});
+
+Route::prefix('wpp')->group(function () {
+    Route::post('/send-now', [WhatsAppController::class, 'sendNow'])->name('wpp.send.now');
+    Route::post('/send-queued', [WhatsAppController::class, 'sendQueued'])->name('wpp.send.queued');
 });
 
 // Rotas da empresa (devem ficar por último para não conflitar)

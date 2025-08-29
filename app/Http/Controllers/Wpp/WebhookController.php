@@ -84,7 +84,7 @@ class WebhookController extends Controller
         }
 
         $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $appSecret);
-        
+
         return hash_equals($expectedSignature, $signature);
     }
 

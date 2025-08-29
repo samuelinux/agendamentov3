@@ -11,6 +11,8 @@ use App\Services\DisponibilidadeService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendWhatsAppTemplateMessage;
+
 
 class AgendamentoController extends Controller
 {
@@ -42,7 +44,7 @@ class AgendamentoController extends Controller
         $diasDisponiveis = $this->disponibilidadeService->obterProximosDiasDisponiveis($empresa, $servico, $quantidadeDeDias);
 
         $telefoneLogado = session('cliente_telefone');
-        return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis", "telefoneLogado", 'empresa'));
+        return view("agendamento.horarios", compact("empresa", "servico", "diasDisponiveis", "telefoneLogado"));
     }
 
     /**
@@ -50,99 +52,72 @@ class AgendamentoController extends Controller
      */
     public function confirmarAgendamento(Request $request, Empresa $empresa, Servico $servico)
     {
-        $rules = [
-            "data_hora_inicio" => "required|date",
-            "telefone_cliente" => "required|string|max:20",
-        ];
+        $request->validate([
+            'data_hora_inicio' => 'required|date',
+            'telefone_cliente' => 'required|string|max:20',
+            'nome_cliente'     => 'nullable|string|max:255',
+        ]);
 
-        // Se o nome_cliente não for fornecido, significa que o usuário já existe
-        if (!$request->has("nome_cliente") || empty($request->nome_cliente)) {
-            // Se o usuário já existe, não precisamos validar o nome
-        } else {
-            // Se for um novo usuário, o nome é obrigatório
-            $rules["nome_cliente"] = "required|string|max:255";
-        }
+        if ($servico->empresa_id !== $empresa->id || !$servico->ativo) abort(404);
 
-        $request->validate($rules);
-
-        // Verificar se o serviço pertence à empresa e está ativo
-        if ($servico->empresa_id !== $empresa->id || !$servico->ativo) {
-            abort(404);
-        }
-
-        $dataHoraInicio = Carbon::parse($request->data_hora_inicio);
-
-        // Verificar se o horário de início não é no passado
-        if ($dataHoraInicio->isPast()) {
-            return back()->withErrors([
-                "data_hora_inicio" => "Não é possível agendar para um horário que já passou."
-            ]);
-        }
-
-        $dataHoraFim = $dataHoraInicio->copy()->addMinutes($servico->duracao_minutos);
-        $quantidadeDeDias = (int) ($empresa->limite_dias_agenda ?? 1);
-        // Verificar se o horário ainda está disponível
-        $horariosDisponiveis = $this->disponibilidadeService->gerarHorariosDisponiveis(
-            $empresa,
-            $servico,
-            $dataHoraInicio,
-            $quantidadeDeDias
-        );
-
-        $horarioDisponivel = $horariosDisponiveis->first(function ($horario) use ($request) {
-            return $horario["data_hora_inicio"] === $request->data_hora_inicio;
-        });
-
-        if (!$horarioDisponivel) {
-            return back()->withErrors([
-                "data_hora_inicio" => "Este horário não está mais disponível. Por favor, escolha outro horário."
-            ]);
+        $inicio = Carbon::parse($request->data_hora_inicio);
+        if ($inicio->isPast()) {
+            return back()->withErrors(['data_hora_inicio' => 'Não é possível agendar no passado.']);
         }
 
         try {
             DB::beginTransaction();
 
-            // Buscar ou criar cliente
-            $telefoneLimpo = preg_replace("/\\D/", "", $request->telefone_cliente); // Limpa a máscara
-            $cliente = Usuario::where("telefone", $telefoneLimpo)->first();
+            // cliente
+            $fone = preg_replace('/\D/', '', $request->telefone_cliente);
+            $cliente = Usuario::firstOrCreate(
+                ['telefone' => $fone],
+                ['nome' => $request->input('nome_cliente', 'Cliente'), 'tipo' => 'cliente']
+            );
 
-            if (!$cliente) {
-                // Criar novo usuário se não existir
-                $cliente = Usuario::create([
-                    "nome" => $request->nome_cliente,
-                    "telefone" => $telefoneLimpo,
-                    "tipo" => "cliente"
-                ]);
-            } else {
-                // Se o nome foi fornecido e é diferente, atualizar (caso o usuário tenha digitado um nome diferente)
-                if ($request->has("nome_cliente") && !empty($request->nome_cliente) && $cliente->nome !== $request->nome_cliente) {
-                    $cliente->update(["nome" => $request->nome_cliente]);
-                }
-            }
-
-            // Criar agendamento
+            // agendamento
             $agendamento = Agendamento::create([
-                "empresa_id" => $empresa->id,
-                "servico_id" => $servico->id,
-                "usuario_id" => $cliente->id,
-                "data_hora_inicio" => $dataHoraInicio,
-                "data_hora_fim" => $dataHoraFim,
-                "status" => "confirmado"
+                'empresa_id'      => $empresa->id,
+                'servico_id'      => $servico->id,
+                'usuario_id'      => $cliente->id,
+                'data_hora_inicio'=> $inicio,
+                'data_hora_fim'   => $inicio->copy()->addMinutes($servico->duracao_minutos),
+                'status'          => 'confirmado',
             ]);
 
             DB::commit();
 
-            // Persistir o telefone do cliente na sessão para manter "logado"
-            session(['cliente_telefone' => $telefoneLimpo]);
+            // WA config obrigatória
+            $waConfig = $empresa->waConfig;
+            if ($waConfig) {
+                // 1) confirmação imediata
+                SendWhatsAppTemplateMessage::dispatch(
+                    $waConfig->id,
+                    $cliente->telefone,
+                    'template_confirmacao',
+                    [$cliente->nome, $agendamento->data_hora_inicio->format('d/m H:i')],
+                    $agendamento->id,
+                    $cliente->id,
+                    'CONFIRM'
+                );
 
-            return view("agendamento.confirmacao", compact("agendamento", "empresa", "servico", "cliente"));
+                // 2) lembrete 60 min antes
+                SendWhatsAppTemplateMessage::dispatch(
+                    $waConfig->id,
+                    $cliente->telefone,
+                    'template_lembrete',
+                    [$cliente->nome, $agendamento->data_hora_inicio->format('H:i')],
+                    $agendamento->id,
+                    $cliente->id,
+                    'REMINDER'
+                )->delay($agendamento->data_hora_inicio->subHour());
+            }
 
-        } catch (\Exception $e) {
-            DB::rollback();
+            return view('agendamento.confirmacao', compact('agendamento', 'empresa', 'servico', 'cliente'));
 
-            return back()->withErrors([
-                "error" => "Erro ao processar agendamento. Tente novamente."
-            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Erro ao processar agendamento. Tente novamente.']);
         }
     }
 
@@ -327,6 +302,3 @@ class AgendamentoController extends Controller
         return redirect()->route('cliente.login', $empresa)->with('success', 'Logout realizado com sucesso!');
     }
 }
-
-
-
