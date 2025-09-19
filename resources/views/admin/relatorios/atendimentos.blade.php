@@ -251,6 +251,7 @@
                     </div>
 
                     @foreach ($agendamentosData as $agendamento)
+                    
                         <div class="atendimento-item" onclick="toggleDetalhes({{ $agendamento->id }})">
                             <div class="atendimento-resumo">
                                 <div class="horario-nome">
@@ -272,7 +273,7 @@
                                 <div class="detalhe-row">
                                     <span class="detalhe-label">Valor:</span>
                                     <span class="detalhe-valor">R$
-                                        {{ number_format($agendamento->servico->valor, 2, ',', '.') }}</span>
+                                        {{ number_format($agendamento->valor_pago, 2, ',', '.') }}</span>
                                 </div>
                             </div>
                         </div>
