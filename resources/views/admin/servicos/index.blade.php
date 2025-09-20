@@ -16,7 +16,7 @@
                 <tr>
                     <th>Nome</th>
                     <th>Descrição</th>
-                    <th>Duração</th>
+                    <!--<th>Duração</th> -->
                     <th>Valor</th>
                     <th>Status</th>
                     <th>Ações</th>
@@ -27,7 +27,7 @@
                     <tr>
                         <td>{{ $servico->nome }}</td>
                         <td>{{ Str::limit($servico->descricao, 50) ?: '-' }}</td>
-                        <td>{{ $servico->duracao_minutos }} min</td>
+                        <!--<td>{{ $servico->duracao_minutos }} min</td>-->
                         <td>R$ {{ number_format($servico->valor, 2, ',', '.') }}</td>
                         <td>
                             @if($servico->ativo)
