@@ -361,6 +361,10 @@
                 <ul>
                     <li><a href="{{ route('admin.empresas.index') }}"
                             class="{{ request()->routeIs('admin.empresas.*') ? 'active' : '' }}">Empresas</a></li>
+                    <li>
+                        <a href="{{ route('admin.usuarios.index') }}"
+                            class="{{ request()->routeIs('admin.usuarios.*') ? 'active' : '' }}">Usuários</a>
+                    </li>
                 </ul>
             </nav>
         @else
@@ -411,9 +415,9 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
-@stack('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+    @stack('scripts')
 
     <script>
         function toggleSidebar() {

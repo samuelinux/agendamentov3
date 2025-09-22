@@ -1,15 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AgendamentoController;
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\EmpresaController;
-use App\Http\Controllers\Admin\EmpresaConfigController;
-use App\Http\Controllers\Admin\ServicoController;
-use App\Http\Controllers\Admin\RelatorioController;
 use App\Http\Controllers\Admin\AgendamentoPagamentoController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\EmpresaConfigController;
+use App\Http\Controllers\Admin\EmpresaController;
+use App\Http\Controllers\Admin\RelatorioController;
+use App\Http\Controllers\Admin\ServicoController;
+use App\Http\Controllers\Admin\UsuarioController;
+use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Wpp\WhatsAppController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,35 +51,39 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('empresas', EmpresaController::class)->except(['show', 'destroy']);
         Route::patch('empresas/{empresa}/toggle-status', [EmpresaController::class, 'toggleStatus'])->name('empresas.toggle-status');
 
+        // Usuários (novo CRUD)
+        Route::resource('usuarios', UsuarioController::class)
+            ->except(['show'])
+            ->names('usuarios');
+
         // Rotas para Admin da Empresa (gestão de serviços)
         Route::resource('servicos', ServicoController::class)->except(['show']);
         Route::patch('servicos/{servico}/toggle-status', [ServicoController::class, 'toggleStatus'])->name('servicos.toggle-status');
 
         // Rotas para configurações da empresa
-        Route::get("empresa-config", [EmpresaConfigController::class, "edit"])->name("empresa-config.edit");
-        Route::patch("empresa-config", [EmpresaConfigController::class, "update"])->name("empresa-config.update");
+        Route::get('empresa-config', [EmpresaConfigController::class, 'edit'])->name('empresa-config.edit');
+        Route::patch('empresa-config', [EmpresaConfigController::class, 'update'])->name('empresa-config.update');
 
         // Rotas para carga horária
-        Route::get("working-hours", [AuthController::class, "showWorkingHoursForm"])->name("working_hours.form");
-        Route::post("working-hours", [AuthController::class, "saveWorkingHours"])->name("working_hours.save");
+        Route::get('working-hours', [AuthController::class, 'showWorkingHoursForm'])->name('working_hours.form');
+        Route::post('working-hours', [AuthController::class, 'saveWorkingHours'])->name('working_hours.save');
 
         // Rotas para relatórios
-        Route::get("relatorios/atendimentos", [RelatorioController::class, "atendimentos"])->name("relatorios.atendimentos");
+        Route::get('relatorios/atendimentos', [RelatorioController::class, 'atendimentos'])->name('relatorios.atendimentos');
 
         // Rotas para configurações do WhatsApp
-        Route::prefix("wpp")->name("wpp.")->group(function () {
-            Route::get("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "showForm"])->name("config.form");
-            Route::post("config", [\App\Http\Controllers\Wpp\WaConfigController::class, "save"])->name("config.save");
+        Route::prefix('wpp')->name('wpp.')->group(function () {
+            Route::get('config', [App\Http\Controllers\Wpp\WaConfigController::class, 'showForm'])->name('config.form');
+            Route::post('config', [App\Http\Controllers\Wpp\WaConfigController::class, 'save'])->name('config.save');
         });
         Route::post('/agendamentos/{agendamento}/registrar-pagamento', [AgendamentoPagamentoController::class, 'store'])->name('agendamentos.registrar-pagamento');
-
     });
 });
 
 // Rotas públicas para webhooks do WhatsApp (sem autenticação)
-Route::prefix("webhook/whatsapp")->name("webhook.whatsapp.")->group(function () {
-    Route::get("/", [\App\Http\Controllers\Wpp\WebhookController::class, "verify"])->name("verify");
-    Route::post("/", [\App\Http\Controllers\Wpp\WebhookController::class, "handle"])->name("handle");
+Route::prefix('webhook/whatsapp')->name('webhook.whatsapp.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Wpp\WebhookController::class, 'verify'])->name('verify');
+    Route::post('/', [App\Http\Controllers\Wpp\WebhookController::class, 'handle'])->name('handle');
 });
 
 Route::prefix('wpp')->group(function () {
