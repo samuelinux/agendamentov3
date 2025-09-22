@@ -139,7 +139,6 @@
         
         <div class="demo-info">
             <h4>Contas de Demonstração:</h4>
-            <p><strong>Super Admin:</strong> admin@sistema.com / 123456</p>
             <p><strong>Barbearia:</strong> joao@barbearia.com / 123456</p>
             <p><strong>Salão:</strong> maria@salao.com / 123456</p>
         </div>
